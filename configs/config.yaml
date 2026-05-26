@@ -1,0 +1,91 @@
+project:
+  name: GSE159677_Carotid_MainProject
+  species: Homo sapiens
+  output_root: results
+  seed: 123
+
+inputs:
+  gse260657_dir: /public3/DSC/single_cell/GSE260657_Carotid
+  gse247238_dir: /public3/DSC/single_cell/GSE247238_Carotid
+  gse131778_file: /public3/DSC/single_cell/GSE131778_AC/GSE131778_raw_counts.txt.gz
+  gse210152_rds: /public3/DSC/single_cell/GSE210152_AC/GSE210152.rds
+  gse155468_dir: /public3/DSC/single_cell/GSE155468_AscAorta_Control_PA
+  gse159677_dir: /public3/DSC/single_cell/GSE159677_Carotid_MainProject
+  existing_integrated_rds: /public3/DSC/single_cell/Result/figer_new/group_result.rds
+
+outputs:
+  prepared_objects_rds: results/interim/prepared_seurat_objects.rds
+  integrated_rds: results/interim/group_result.rds
+  annotated_rds: results/interim/group_result_annotated.rds
+  mo_ma_rds: results/interim/mo_ma_result.rds
+  hdwgcnna_rds: results/hdWGCNA/Mo_Ma/data.rds
+  macspectrum_rds: results/hdWGCNA/Mo_Ma/data_scored.rds
+  pseudotime_rds: results/monocle3/data_pseudotime.rds
+
+qc:
+  min_cells: 3
+  min_features: 200
+  max_features: 6000
+  max_percent_mt: 20
+
+integration:
+  method: harmony
+  dims: 30
+  resolution: 0.5
+  batch_column: orig.ident
+
+cell_types:
+  monocyte_macrophage_labels:
+    - Monocyte
+    - Macrophage
+    - FOAM_cells1
+    - FOAM_cells2
+    - Foam cells1
+    - Foam cells2
+  cell_type_column: Celltype_raw1
+  disease_column: AC_PA
+
+hdwgcnna:
+  wgcna_name: wgcna
+  group_by: Celltype_raw1
+  metacell_k: 25
+  soft_power: 4
+  min_module_size: 50
+
+monocle3:
+  num_dim: 20
+  umap_neighbors: 30
+  umap_min_dist: 0.3
+  cluster_resolution: 0.00001
+  minimal_branch_len: 2
+  selected_modules:
+    - magenta
+    - yellow
+    - black
+    - turquoise
+    - brown
+    - purple
+
+macspectrum:
+  assay: RNA
+  slot: data
+  species: hum
+
+pathway:
+  output_dir: results/GSEA_GSVA
+  msig_category: C2
+  gsea_pvalue_cutoff: 0.05
+  gsva_logfc_cutoff: 0.5
+  gsva_fdr_cutoff: 0.01
+  metabolism_method: VISION
+  metabolism_type: KEGG
+  ncores: 4
+
+apobec3a_ko:
+  clone13:
+    count_table: /dsk2/data/C-to-U/APOBEC3A/00.mergeRawFq/count.txt
+    deg_table: /dsk2/data/C-to-U/APOBEC3A/00.mergeRawFq/ko/3A_total.csv
+  clone37:
+    count_table: /dsk2/who/panxy/RNAediting/CAD/count.txt
+    deg_table: /public3/DSC/single_cell/DEG_ALL.csv
+

@@ -1,0 +1,29 @@
+Package: GSE159677CarotidPipeline
+Title: Carotid Atherosclerosis Single-Cell Analysis Pipeline
+Version: 0.1.0
+Description: Configuration-driven R scripts for Seurat integration, hdWGCNA, Monocle3, macSpectrum, GSEA, and GSVA analyses.
+Encoding: UTF-8
+License: MIT
+Depends: R (>= 4.2.0)
+Imports:
+    Seurat,
+    SeuratObject,
+    dplyr,
+    tidyr,
+    tibble,
+    ggplot2,
+    patchwork,
+    yaml,
+    optparse,
+    GEOquery,
+    harmony,
+    WGCNA,
+    hdWGCNA,
+    monocle3,
+    macSpectrum,
+    clusterProfiler,
+    org.Hs.eg.db,
+    msigdbr,
+    GSVA,
+    limma,
+    ggrepel

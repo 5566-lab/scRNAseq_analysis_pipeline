@@ -1,0 +1,38 @@
+# GSE159677 Carotid Single-Cell Analysis
+
+Configuration-driven R pipeline for carotid atherosclerosis single-cell analysis, including Seurat integration, monocyte/macrophage hdWGCNA, macSpectrum scoring, Monocle3 pseudotime analysis, and GSEA/GSVA pathway comparison with APOBEC3A-KO RNA-seq results.
+
+## Pipeline
+
+1. `scripts/01_prepare_seurat_objects.R` builds per-study Seurat objects from public count matrices.
+2. `scripts/02_integrate_cluster.R` performs QC, integration, clustering, marker detection, and annotation-ready outputs.
+3. `scripts/03_hdWGCNA_mo_ma.R` runs hdWGCNA on monocyte/macrophage subsets.
+4. `scripts/04_macSpectrum_scores.R` adds MPI and AMDI macrophage state scores.
+5. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
+6. `scripts/06_gsea_gsva.R` performs metabolism scoring, GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
+
+Run the full pipeline:
+
+```bash
+Rscript scripts/run_pipeline.R --config configs/config.yaml
+```
+
+Run one step:
+
+```bash
+Rscript scripts/03_hdWGCNA_mo_ma.R --config configs/config.yaml
+```
+
+## Configuration
+
+Edit `configs/config.yaml` for input paths, output directories, filtering thresholds, analysis parameters, and APOBEC3A-KO count/DEG files. No script requires project-specific absolute paths outside the config file.
+
+## Source Code Policy
+
+Original exploratory scripts are summarized in `docs/code_function_archive.md`. When multiple scripts had overlapping functions, the latest or most focused version was retained as the implementation source:
+
+- `single_cell.R` is treated as the latest whole-workflow reference.
+- `hdWGCNA/Mo_Ma/MM_WGCNA.R` supersedes the older generic `hdWGCNA/hdWGCNA.R` for Mo/Ma module analysis.
+- `monocle3/monocle_MM/MM_monocle.R` supersedes duplicated Monocle3 blocks in `single_cell.R`.
+- `untitled9.R` is treated as a supplemental plotting scratch script, not a pipeline step.
+

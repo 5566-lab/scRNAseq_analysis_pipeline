@@ -1,0 +1,7 @@
+dataset,input_type,path,grouping_rule,notes
+GSE260657,txt_gz,/public3/DSC/single_cell/GSE260657_Carotid,"human_1-7 stable; human_8-15 unstable","Carotid stable/unstable plaque"
+GSE247238,mtx_gz,/public3/DSC/single_cell/GSE247238_Carotid,"GEO title CAR ID mapped to patient table","Carotid matrix files"
+GSE131778,table,/public3/DSC/single_cell/GSE131778_AC/GSE131778_raw_counts.txt.gz,"single file","Coronary AC reference"
+GSE210152,rds,/public3/DSC/single_cell/GSE210152_AC/GSE210152.rds,"existing Seurat object","AC reference"
+GSE155468,10x_dir,/public3/DSC/single_cell/GSE155468_AscAorta_Control_PA,"directory-based 10X","AscAorta control/PA"
+GSE159677,10x_dir,/public3/DSC/single_cell/GSE159677_Carotid_MainProject,"sample directory metadata inferred from folder names","Main carotid AC/PA dataset"

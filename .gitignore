@@ -1,0 +1,13 @@
+.Rhistory
+.RData
+.Rproj.user/
+.DS_Store
+*.log
+*.tmp
+data/raw/
+data/interim/
+results/
+logs/
+!data/.gitkeep
+!results/.gitkeep
+!logs/.gitkeep
