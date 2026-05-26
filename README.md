@@ -9,7 +9,7 @@ Configuration-driven R pipeline for carotid atherosclerosis single-cell analysis
 3. `scripts/03_hdWGCNA_mo_ma.R` runs hdWGCNA on monocyte/macrophage subsets.
 4. `scripts/04b_auc_macrophage_signatures.R` computes custom AUCell M1/M2/Mono immaturity scores from the curated gene sets in the source script.
 5. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
-6. `scripts/06_gsea_gsva.R` performs metabolism scoring, GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
+6. `scripts/06_gsea_gsva.R` performs GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
 
 Optional auxiliary scoring:
 
@@ -35,7 +35,9 @@ Rscript scripts/03_hdWGCNA_mo_ma.R --config configs/config.yaml
 
 Edit `configs/config.yaml` for input paths, output directories, filtering thresholds, analysis parameters, and APOBEC3A-KO count/DEG files. No script requires project-specific absolute paths outside the config file.
 
-The current dataset loader covers `GSE260657`, `GSE247238`, `GSE131778`, `GSE210152`, `GSE155468`, `GSE159677`, `GSE213740`, and `GSE216860`.
+The current dataset loader covers `GSE260657`, `GSE247238`, `GSE131778`, `GSE210152`, `GSE155468`, `GSE159677`, `GSE213740`, `GSE234077`, `GSE224273`, `GSE253903`, and `GSE216860`.
+
+See `docs/final_coverage_audit.md` for the final coverage check against the exploratory scripts, including modules that remain archived but are not automated in the default pipeline.
 
 ## Source Code Policy
 

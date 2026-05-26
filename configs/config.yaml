@@ -7,8 +7,8 @@ project:
 inputs:
   gse260657_dir: /public3/DSC/single_cell/GSE260657_Carotid
   gse247238_dir: /public3/DSC/single_cell/GSE247238_Carotid
-  gse131778_file: /public3/DSC/single_cell/GSE131778_AC/GSE131778_raw_counts.txt.gz
-  gse210152_rds: /public3/DSC/single_cell/GSE210152_AC/GSE210152.rds
+  gse131778_file: /public3/DSC/single_cell/GSE131778_Coronary_AC/GSE131778_human_coronary_scRNAseq.txt
+  gse210152_rds: /public3/DSC/single_cell/GSE210152_Carotid_AC/GSE210152_raw.RDS
   gse155468_dir: /public3/DSC/single_cell/GSE155468_AscAorta_Control_PA
   gse213740_dir: /public3/DSC/single_cell/GSE213740_AscAorta_Control_PA
   gse216860_dir: /public3/DSC/single_cell/GSE216860_Carotid_PA
@@ -20,6 +20,18 @@ directory_10x_datasets:
     path: /public3/DSC/single_cell/GSE213740_AscAorta_Control_PA
     ac_pa: Control AscAorta
     notes: "Three samples overlap with GSE216860 in the exploratory script; keep configurable for reproducibility."
+  - dataset: GSE234077
+    path: /public3/DSC/single_cell/GSE234077_Carotid_AC
+    ac_pa: Carotid Atherosclerotic Core
+    notes: "Directory-based carotid AC 10X dataset from the source script."
+  - dataset: GSE224273
+    path: /public3/DSC/single_cell/GSE224273_Carotid_AC
+    ac_pa: Carotid Atherosclerotic Core
+    notes: "Directory-based carotid AC 10X dataset from the source script."
+  - dataset: GSE253903
+    path: /public3/DSC/single_cell/GSE253903_Carotid_AC
+    ac_pa: Carotid Atherosclerotic Core
+    notes: "Directory-based carotid AC 10X dataset from the source script."
   - dataset: GSE216860
     path: /public3/DSC/single_cell/GSE216860_Carotid_PA
     ac_pa: Control AscAorta

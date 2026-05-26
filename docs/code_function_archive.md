@@ -24,7 +24,7 @@ Source directory: `/public3/DSC/single_cell/GSE159677_Carotid_MainProject`
 | `scripts/04b_auc_macrophage_signatures.R` | Primary custom M1/M2/Mono immaturity AUCell gene-set scoring from `single_cell.R`. |
 | `scripts/04_macSpectrum_scores.R` | Optional auxiliary MPI/AMDI scoring from `macSpectrum.R`; excluded from default pipeline. |
 | `scripts/05_monocle_pseudotime.R` | Trajectory workflow from `monocle3/monocle_MM/MM_monocle.R`. |
-| `scripts/06_gsea_gsva.R` | scMetabolism, GSEA, GSVA, APOBEC3A-KO comparison from `GSEA/GSEA_GSVA.R`. |
+| `scripts/06_gsea_gsva.R` | GSEA, GSVA, APOBEC3A-KO comparison from `GSEA/GSEA_GSVA.R`. |
 
 ## Loaded Datasets
 
@@ -37,6 +37,9 @@ Source directory: `/public3/DSC/single_cell/GSE159677_Carotid_MainProject`
 - `GSE155468`
 - `GSE159677`
 - `GSE213740`
+- `GSE234077`
+- `GSE224273`
+- `GSE253903`
 - `GSE216860`
 
 The exploratory script notes that `GSE213740` overlaps with samples in `GSE216860`; this repository keeps both loaders and records that relationship in `metadata/sample_manifest.csv` so the decision to exclude one can be made explicitly during analysis.

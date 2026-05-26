@@ -132,6 +132,13 @@ load_existing_rds <- function(path, source_gse) {
   }
   obj <- readRDS(path)
   obj$Source_GSE <- source_gse
+  if (source_gse == "GSE210152") {
+    obj$AC_PA <- "Carotid Atherosclerotic Core"
+    if (!"Patient_ID" %in% colnames(obj@meta.data)) {
+      obj$Patient_ID <- "GSE210152_Sample1"
+    }
+    Project(obj) <- "GSE210152"
+  }
   obj
 }
 
