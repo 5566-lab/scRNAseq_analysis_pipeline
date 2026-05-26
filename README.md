@@ -27,6 +27,8 @@ Rscript scripts/03_hdWGCNA_mo_ma.R --config configs/config.yaml
 
 Edit `configs/config.yaml` for input paths, output directories, filtering thresholds, analysis parameters, and APOBEC3A-KO count/DEG files. No script requires project-specific absolute paths outside the config file.
 
+The current dataset loader covers `GSE260657`, `GSE247238`, `GSE131778`, `GSE210152`, `GSE155468`, `GSE159677`, `GSE213740`, and `GSE216860`.
+
 ## Source Code Policy
 
 Original exploratory scripts are summarized in `docs/code_function_archive.md`. When multiple scripts had overlapping functions, the latest or most focused version was retained as the implementation source:
@@ -35,4 +37,3 @@ Original exploratory scripts are summarized in `docs/code_function_archive.md`. 
 - `hdWGCNA/Mo_Ma/MM_WGCNA.R` supersedes the older generic `hdWGCNA/hdWGCNA.R` for Mo/Ma module analysis.
 - `monocle3/monocle_MM/MM_monocle.R` supersedes duplicated Monocle3 blocks in `single_cell.R`.
 - `untitled9.R` is treated as a supplemental plotting scratch script, not a pipeline step.
-

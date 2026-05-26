@@ -3,5 +3,7 @@ GSE260657,txt_gz,/public3/DSC/single_cell/GSE260657_Carotid,"human_1-7 stable; h
 GSE247238,mtx_gz,/public3/DSC/single_cell/GSE247238_Carotid,"GEO title CAR ID mapped to patient table","Carotid matrix files"
 GSE131778,table,/public3/DSC/single_cell/GSE131778_AC/GSE131778_raw_counts.txt.gz,"single file","Coronary AC reference"
 GSE210152,rds,/public3/DSC/single_cell/GSE210152_AC/GSE210152.rds,"existing Seurat object","AC reference"
-GSE155468,10x_dir,/public3/DSC/single_cell/GSE155468_AscAorta_Control_PA,"directory-based 10X","AscAorta control/PA"
+GSE155468,txt_gz,/public3/DSC/single_cell/GSE155468_AscAorta_Control_PA,"GSM4704931/4932/4933 txt.gz files","AscAorta control/PA"
+GSE213740,10x_dir,/public3/DSC/single_cell/GSE213740_AscAorta_Control_PA,"directory-based 10X","AscAorta control; source script notes overlap with GSE216860"
+GSE216860,10x_dir,/public3/DSC/single_cell/GSE216860_Carotid_PA,"directory-based 10X","Classified as Control AscAorta in source script"
 GSE159677,10x_dir,/public3/DSC/single_cell/GSE159677_Carotid_MainProject,"sample directory metadata inferred from folder names","Main carotid AC/PA dataset"

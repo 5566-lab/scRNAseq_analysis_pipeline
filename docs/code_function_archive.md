@@ -25,3 +25,17 @@ Source directory: `/public3/DSC/single_cell/GSE159677_Carotid_MainProject`
 | `scripts/05_monocle_pseudotime.R` | Trajectory workflow from `monocle3/monocle_MM/MM_monocle.R`. |
 | `scripts/06_gsea_gsva.R` | scMetabolism, GSEA, GSVA, APOBEC3A-KO comparison from `GSEA/GSEA_GSVA.R`. |
 
+## Loaded Datasets
+
+`scripts/01_prepare_seurat_objects.R` now covers the source loading blocks for:
+
+- `GSE260657`
+- `GSE247238`
+- `GSE131778`
+- `GSE210152`
+- `GSE155468`
+- `GSE159677`
+- `GSE213740`
+- `GSE216860`
+
+The exploratory script notes that `GSE213740` overlaps with samples in `GSE216860`; this repository keeps both loaders and records that relationship in `metadata/sample_manifest.csv` so the decision to exclude one can be made explicitly during analysis.

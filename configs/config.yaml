@@ -10,8 +10,20 @@ inputs:
   gse131778_file: /public3/DSC/single_cell/GSE131778_AC/GSE131778_raw_counts.txt.gz
   gse210152_rds: /public3/DSC/single_cell/GSE210152_AC/GSE210152.rds
   gse155468_dir: /public3/DSC/single_cell/GSE155468_AscAorta_Control_PA
+  gse213740_dir: /public3/DSC/single_cell/GSE213740_AscAorta_Control_PA
+  gse216860_dir: /public3/DSC/single_cell/GSE216860_Carotid_PA
   gse159677_dir: /public3/DSC/single_cell/GSE159677_Carotid_MainProject
   existing_integrated_rds: /public3/DSC/single_cell/Result/figer_new/group_result.rds
+
+directory_10x_datasets:
+  - dataset: GSE213740
+    path: /public3/DSC/single_cell/GSE213740_AscAorta_Control_PA
+    ac_pa: Control AscAorta
+    notes: "Three samples overlap with GSE216860 in the exploratory script; keep configurable for reproducibility."
+  - dataset: GSE216860
+    path: /public3/DSC/single_cell/GSE216860_Carotid_PA
+    ac_pa: Control AscAorta
+    notes: "Classified as Control AscAorta following the source script comments."
 
 outputs:
   prepared_objects_rds: results/interim/prepared_seurat_objects.rds
@@ -88,4 +100,3 @@ apobec3a_ko:
   clone37:
     count_table: /dsk2/who/panxy/RNAediting/CAD/count.txt
     deg_table: /public3/DSC/single_cell/DEG_ALL.csv
-
