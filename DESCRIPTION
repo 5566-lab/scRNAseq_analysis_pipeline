@@ -27,4 +27,6 @@ Imports:
     GSVA,
     limma,
     ggrepel,
-    AUCell
+    AUCell,
+    ggpubr,
+    showtext

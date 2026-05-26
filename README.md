@@ -11,6 +11,8 @@ Configuration-driven R pipeline for carotid atherosclerosis single-cell analysis
 5. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
 6. `scripts/06_gsea_gsva.R` performs GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
 
+The AUCell step also regenerates the S2.6 MPI/AMDI violin plots, LAM/Foam-cell density plot, and Foam marker violin panels with the updated font sizing.
+
 Optional auxiliary scoring:
 
 ```bash

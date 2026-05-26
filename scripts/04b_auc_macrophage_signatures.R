@@ -4,8 +4,10 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(tidyr)
   library(ggplot2)
+  library(ggpubr)
   library(patchwork)
   library(AUCell)
+  library(showtext)
 })
 
 source("R/utils/config.R")
@@ -112,37 +114,244 @@ plot_dir <- project_path(cfg, "results/figures/auc_macrophage_signatures")
 ensure_dir(plot_dir)
 cell_col <- cfg$cell_types$cell_type_column
 
-polar_summary <- obj@meta.data |>
-  group_by(.data[[cell_col]]) |>
-  summarise(Mean_Polar = mean(Polarization_Index, na.rm = TRUE), .groups = "drop") |>
-  arrange(desc(Mean_Polar))
-p_polar <- ggplot(polar_summary, aes(x = reorder(.data[[cell_col]], Mean_Polar), y = Mean_Polar, fill = Mean_Polar > 0)) +
-  geom_col(color = "white", width = 0.8) +
-  coord_flip() +
-  scale_fill_manual(values = c("TRUE" = "#BC3C29FF", "FALSE" = "#0072B5FF")) +
-  labs(x = "Cell subtype", y = "Macrophage Polarization Index") +
-  theme_classic() +
-  theme(legend.position = "none")
-ggsave(file.path(plot_dir, "Macrophage_Polarization_Direction.pdf"), p_polar, width = 10, height = 6)
-
-if (!all(is.na(obj$AMDI_Index))) {
-  amdi_summary <- obj@meta.data |>
-    group_by(.data[[cell_col]]) |>
-    summarise(Mean_AMDI = mean(AMDI_Index, na.rm = TRUE), .groups = "drop") |>
-    arrange(Mean_AMDI)
-  p_amdi <- ggplot(amdi_summary, aes(x = reorder(.data[[cell_col]], Mean_AMDI), y = Mean_AMDI, fill = Mean_AMDI)) +
-    geom_col(color = "black", width = 0.7) +
-    coord_flip() +
-    scale_fill_gradient(low = "#E5F5E0", high = "#31A354") +
-    labs(x = "Cell subtype", y = "Macrophage Maturation Index") +
-    theme_classic() +
-    theme(legend.position = "none")
-  ggsave(file.path(plot_dir, "Macrophage_Maturation_Index.pdf"), p_amdi, width = 10, height = 6)
+setup_plot_font <- function(cfg) {
+  font_family <- cfg$auc_signatures$font_family
+  font_files <- unlist(cfg$auc_signatures$fonts)
+  if (!is.null(font_family) && length(font_files) == 4 && all(file.exists(font_files))) {
+    showtext::font_add(
+      family = font_family,
+      regular = font_files[["regular"]],
+      bold = font_files[["bold"]],
+      italic = font_files[["italic"]],
+      bolditalic = font_files[["bolditalic"]]
+    )
+    showtext::showtext_auto()
+    return(font_family)
+  }
+  "sans"
 }
 
-ggsave(file.path(plot_dir, "FeaturePlot_Polarization_Index.pdf"), FeaturePlot(obj, features = "Polarization_Index"), width = 8, height = 6)
-if (!all(is.na(obj$AMDI_Index))) {
-  ggsave(file.path(plot_dir, "FeaturePlot_AMDI_Index.pdf"), FeaturePlot(obj, features = "AMDI_Index"), width = 8, height = 6)
+normalize_sample_type <- function(x) {
+  x <- as.character(x)
+  dplyr::case_when(
+    x %in% c("AC", "Atherosclerotic Core", "Carotid Atherosclerotic Core") ~ "Atherosclerotic Core",
+    x %in% c("PA", "Proximal Adjacent", "Carotid Proximal Adjacent") ~ "Proximal Adjacent",
+    TRUE ~ x
+  )
 }
 
-message_step("Saved custom AUCell-scored object: ", out_rds)
+require_metadata <- function(obj, cols) {
+  missing <- setdiff(cols, colnames(obj@meta.data))
+  if (length(missing) > 0) {
+    stop("AUCell scored object is missing metadata columns: ", paste(missing, collapse = ", "), call. = FALSE)
+  }
+}
+
+get_sig_label <- function(p) {
+  if (is.na(p)) {
+    return("ns")
+  }
+  if (p <= 0.0001) {
+    return("****")
+  }
+  if (p <= 0.001) {
+    return("***")
+  }
+  if (p <= 0.01) {
+    return("**")
+  }
+  if (p <= 0.05) {
+    return("*")
+  }
+  "ns"
+}
+
+safe_wilcox_label <- function(df, y_col, group_col) {
+  complete <- df[!is.na(df[[y_col]]) & !is.na(df[[group_col]]), , drop = FALSE]
+  if (length(unique(complete[[group_col]])) != 2) {
+    return("ns")
+  }
+  get_sig_label(wilcox.test(complete[[y_col]] ~ complete[[group_col]])$p.value)
+}
+
+make_index_vln <- function(df, y_col, y_lab, font_family_use, theme_vln) {
+  y_values <- df[[y_col]]
+  y_min <- min(y_values, na.rm = TRUE)
+  y_max <- max(y_values, na.rm = TRUE)
+  y_range <- y_max - y_min
+  if (y_range == 0) {
+    y_range <- max(abs(y_max) * 0.1, 0.01)
+  }
+
+  y_bracket <- y_max + 0.12 * y_range
+  y_tick <- y_max + 0.10 * y_range
+  y_label <- y_max + 0.155 * y_range
+  y_bottom <- y_min - 0.08 * y_range
+  y_top <- y_max + 0.25 * y_range
+  sig_label <- safe_wilcox_label(df, y_col, "Sample_Type")
+
+  ggplot(df, aes(x = Sample_Type, y = .data[[y_col]], fill = Sample_Type)) +
+    geom_violin(scale = "width", trim = TRUE, color = "black", linewidth = 0.45, alpha = 1) +
+    geom_boxplot(width = 0.15, fill = "white", color = "black", outlier.shape = NA, alpha = 0.7, linewidth = 0.45) +
+    scale_fill_manual(values = c("Atherosclerotic Core" = "#D95F02", "Proximal Adjacent" = "#1B9E77")) +
+    geom_segment(aes(x = 1, xend = 2, y = y_bracket, yend = y_bracket), inherit.aes = FALSE, linewidth = 0.6, color = "black") +
+    geom_segment(aes(x = 1, xend = 1, y = y_tick, yend = y_bracket), inherit.aes = FALSE, linewidth = 0.6, color = "black") +
+    geom_segment(aes(x = 2, xend = 2, y = y_tick, yend = y_bracket), inherit.aes = FALSE, linewidth = 0.6, color = "black") +
+    annotate("text", x = 1.5, y = y_label, label = sig_label, size = 6, family = font_family_use, fontface = "bold") +
+    labs(x = NULL, y = y_lab) +
+    coord_cartesian(ylim = c(y_bottom, y_top), clip = "off") +
+    theme_vln
+}
+
+make_3cell_index_vln <- function(df, y_col, y_lab, comparisons, theme_vln) {
+  y_min <- min(df[[y_col]], na.rm = TRUE)
+  y_max <- max(df[[y_col]], na.rm = TRUE)
+  y_range <- y_max - y_min
+  if (y_range == 0) {
+    y_range <- max(abs(y_max) * 0.1, 0.01)
+  }
+
+  present_groups <- as.character(unique(df$Celltype_raw1))
+  valid_comparisons <- Filter(function(x) all(x %in% present_groups), comparisons)
+
+  p <- ggplot(df, aes(x = Celltype_raw1, y = .data[[y_col]], fill = Celltype_raw1)) +
+    geom_violin(scale = "width", trim = TRUE, color = "black", linewidth = 0.45, alpha = 1) +
+    geom_boxplot(width = 0.15, fill = "white", color = "black", outlier.shape = NA, alpha = 0.7, linewidth = 0.45) +
+    scale_fill_manual(values = c("Foam cells1" = "#1B9E77", "Foam cells2" = "#D95F02", "LAM" = "#7570B3"))
+
+  if (length(valid_comparisons) > 0) {
+    p <- p + stat_compare_means(
+      comparisons = valid_comparisons,
+      method = "wilcox.test",
+      label = "p.signif",
+      size = 7.5,
+      bracket.size = 0.6,
+      tip.length = 0.02,
+      y.position = y_max + seq(0.12, by = 0.10, length.out = length(valid_comparisons)) * y_range
+    )
+  }
+
+  p +
+    labs(x = NULL, y = y_lab) +
+    coord_cartesian(ylim = c(y_min - 0.08 * y_range, y_max + 0.42 * y_range), clip = "off") +
+    theme_vln
+}
+
+save_plot_pair <- function(plot, basename, width, height) {
+  ggsave(file.path(plot_dir, paste0(basename, ".pdf")), plot = plot, device = cairo_pdf, width = width, height = height)
+  ggsave(file.path(plot_dir, paste0(basename, ".png")), plot = plot, width = width, height = height, dpi = 300)
+}
+
+require_metadata(obj, c("Sample_Type", "Celltype_raw1", "Polarization_Index", "AMDI_Index"))
+obj$Sample_Type <- factor(normalize_sample_type(obj$Sample_Type), levels = c("Atherosclerotic Core", "Proximal Adjacent"))
+obj$Celltype_raw1 <- normalize_foam_labels(obj$Celltype_raw1)
+
+font_family_use <- setup_plot_font(cfg)
+theme_custom_plus2 <- theme_bw(base_family = font_family_use, base_size = 13) +
+  theme(
+    axis.text = element_text(size = 14, color = "black"),
+    axis.title = element_text(size = 16, face = "bold"),
+    strip.text = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 14),
+    legend.title = element_text(size = 16, face = "bold"),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    panel.grid.major = element_line(color = "grey90"),
+    panel.grid.minor = element_blank()
+  )
+theme_vln_like_example <- theme_classic(base_family = font_family_use) +
+  theme(
+    text = element_text(size = 16, color = "black"),
+    axis.title.y = element_text(size = 18, color = "black"),
+    axis.title.x = element_blank(),
+    axis.text.x = element_text(size = 16, color = "black", angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 16, color = "black"),
+    axis.line = element_line(color = "black", linewidth = 0.6),
+    axis.ticks = element_line(color = "black", linewidth = 0.5),
+    plot.title = element_blank(),
+    legend.position = "none",
+    panel.grid = element_blank(),
+    plot.margin = margin(t = 15, r = 10, b = 10, l = 10)
+  )
+theme_vln_3cell <- theme_vln_like_example +
+  theme(plot.margin = margin(t = 18, r = 10, b = 10, l = 10))
+
+plot_df <- obj@meta.data |>
+  filter(!is.na(Sample_Type)) |>
+  select(Sample_Type, Polarization_Index, AMDI_Index)
+if (nrow(plot_df) > 0) {
+  p_mpi_amdi <- make_index_vln(plot_df, "Polarization_Index", "Macrophage Polarization Index (MPI)", font_family_use, theme_vln_like_example) |
+    make_index_vln(plot_df, "AMDI_Index", "Macrophage Maturation Index (MMI)", font_family_use, theme_vln_like_example)
+  save_plot_pair(p_mpi_amdi, "S2.6_MPI_AMDI_VlnPlot_exampleStyle_fontPlus2", 10, 6)
+}
+
+celltype_order_3 <- c("Foam cells1", "Foam cells2", "LAM")
+celltype_comparisons_3 <- list(c("Foam cells1", "Foam cells2"), c("Foam cells2", "LAM"), c("Foam cells1", "LAM"))
+plot_df_3cell <- obj@meta.data |>
+  filter(Celltype_raw1 %in% celltype_order_3) |>
+  select(Celltype_raw1, Polarization_Index, AMDI_Index) |>
+  mutate(Celltype_raw1 = factor(Celltype_raw1, levels = celltype_order_3))
+if (nrow(plot_df_3cell) > 0 && length(unique(plot_df_3cell$Celltype_raw1)) >= 2) {
+  p_mpi_mdi_3cell <- make_3cell_index_vln(plot_df_3cell, "Polarization_Index", "Macrophage Polarization Index (MPI)", celltype_comparisons_3, theme_vln_3cell) |
+    make_3cell_index_vln(plot_df_3cell, "AMDI_Index", "Macrophage Differentiation Index (MDI)", celltype_comparisons_3, theme_vln_3cell)
+  save_plot_pair(p_mpi_mdi_3cell, "S2.6_MPI_MDI_3cell_VlnPlot_fontPlus2", 12, 6)
+}
+
+density_df <- obj@meta.data |>
+  filter(Celltype_raw1 %in% c("LAM", "Foam cells1", "Foam cells2")) |>
+  mutate(Celltype_raw1 = factor(Celltype_raw1, levels = c("LAM", "Foam cells1", "Foam cells2")))
+if (nrow(density_df) > 0) {
+  p_density <- ggplot(density_df, aes(x = Polarization_Index, y = AMDI_Index)) +
+    geom_density_2d(aes(color = Celltype_raw1), linewidth = 0.8, alpha = 0.7) +
+    scale_color_manual(values = c("LAM" = "#1B9E77", "Foam cells1" = "#D95F02", "Foam cells2" = "#7570B3")) +
+    geom_vline(xintercept = 0, color = "black", linewidth = 0.5, linetype = "dashed") +
+    theme_custom_plus2 +
+    theme(legend.position = "right", legend.title = element_text(face = "bold"), legend.key = element_blank()) +
+    labs(x = "Polarization Index (MPI)", y = "Maturation Index (AMDI)", color = "Cell type")
+  save_plot_pair(p_density, "S2.6_Trajectory_Density_fontPlus2", 8, 6)
+}
+
+target_genes <- c("CXCL8", "IL1B", "TIMP1", "FOLR2", "TREM2", "C1QB", "APOE", "PLIN2")
+target_genes <- target_genes[target_genes %in% rownames(obj)]
+sub_data_foam <- subset(obj, subset = Celltype_raw1 %in% c("LAM", "Foam cells1", "Foam cells2"))
+if (length(target_genes) > 0 && ncol(sub_data_foam) > 0) {
+  sub_data_foam$Celltype_raw1 <- factor(sub_data_foam$Celltype_raw1, levels = c("LAM", "Foam cells1", "Foam cells2"))
+  present_groups <- as.character(unique(sub_data_foam$Celltype_raw1))
+  foam_comparisons <- list(c("LAM", "Foam cells1"), c("LAM", "Foam cells2"), c("Foam cells1", "Foam cells2"))
+  foam_comparisons <- Filter(function(x) all(x %in% present_groups), foam_comparisons)
+  plots_foam <- lapply(target_genes, function(gene) {
+    p <- VlnPlot(
+      sub_data_foam,
+      features = gene,
+      group.by = "Celltype_raw1",
+      pt.size = 0,
+      cols = c("#1B9E77", "#D95F02", "#7570B3")
+    ) +
+      theme_custom_plus2 +
+      labs(y = "Expression Level", x = "")
+
+    if (length(foam_comparisons) > 0) {
+      p <- p + stat_compare_means(
+        comparisons = foam_comparisons,
+        method = "wilcox.test",
+        label = "p.signif",
+        bracket.size = 0.6,
+        tip.length = 0.02,
+        size = 7,
+        vjust = 0.5
+      )
+    }
+
+    p +
+      scale_y_continuous(expand = expansion(mult = c(0.05, 0.20))) +
+      theme(
+        axis.text.x = element_text(size = 14, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(size = 16, face = "bold"),
+        plot.title = element_text(size = 16, face = "bold.italic", hjust = 0.5)
+      )
+  })
+  combined_violin_plots <- wrap_plots(plots_foam, ncol = 3) & NoLegend()
+  save_plot_pair(combined_violin_plots, "S2.6_Top10_Foam_Markers_VlnPlot_fontPlus2", 15, 15)
+}
+
+message_step("Saved custom AUCell-scored object and S2.6 plots: ", out_rds)

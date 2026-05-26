@@ -43,8 +43,8 @@ outputs:
   annotated_rds: results/interim/group_result_annotated.rds
   mo_ma_rds: results/interim/mo_ma_result.rds
   hdwgcnna_rds: results/hdWGCNA/Mo_Ma/data.rds
-  macspectrum_rds: results/hdWGCNA/Mo_Ma/data_scored.rds
-  auc_scored_rds: results/hdWGCNA/Mo_Ma/data_auc_scored.rds
+  macspectrum_rds: results/hdWGCNA/Mo_Ma/data_macspectrum_scored.rds
+  auc_scored_rds: results/hdWGCNA/Mo_Ma/data_scored.rds
   pseudotime_rds: results/monocle3/data_pseudotime.rds
 
 qc:
@@ -101,6 +101,12 @@ auc_signatures:
   mono_cluster_label: Classical Mono
   mono_top_n: 100
   ncores: 16
+  font_family: Arial
+  fonts:
+    regular: /dsk2/user/dengsc/ARIAL.TTF
+    bold: /dsk2/user/dengsc/ARIALBD.TTF
+    italic: /dsk2/user/dengsc/ARIALI.TTF
+    bolditalic: /dsk2/user/dengsc/ARIALBI.TTF
 
 pathway:
   output_dir: results/GSEA_GSVA

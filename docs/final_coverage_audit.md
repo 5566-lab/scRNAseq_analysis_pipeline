@@ -42,6 +42,7 @@ All single-cell GSE datasets referenced by the source `single_cell.R` loader are
 | QC, integration, clustering, UMAP, cluster markers | Covered |
 | Mo/Ma hdWGCNA modules and hub genes | Covered |
 | Custom M1/M2/Mono immaturity AUCell scoring from `single_cell.R` | Covered and set as default |
+| S2.6 AUCell MPI/AMDI violin plots, LAM/Foam density plot, and Foam marker violin panels | Covered in `scripts/04b_auc_macrophage_signatures.R` |
 | Monocle3 trajectory, pseudotime, APOBEC3A trajectory plot, graph-test genes | Covered |
 | Foam cell vs Macrophage GSEA/GSVA | Covered |
 | APOBEC3A-KO clone13 and clone37 GSEA/GSVA | Covered |
@@ -57,7 +58,7 @@ These source blocks remain preserved in `archive/original_scripts/` but are not 
 | Combined `clone13+clone37` APOBEC3A-KO comparison | Source code exists but current default script covers clone13 and clone37 separately. |
 | Manual/interactive Monocle3 branch selection using `choose_graph_segments()` | Requires interactive branch selection; not safe for unattended pipeline execution. |
 | Advanced branch-dynamics GLM/AUC tables: `T1_Global_Trajectory_Dependent_Genes.csv`, `T2_Model_Based_Hetero_Genes_Final.csv`, `T3_T5_Bifurcation_Key_Genes.xlsx` | Depends on branch-specific objects and modeling setup from late exploratory sections. |
-| Late-stage figure polish: `MainFigure_Top20_Complete_Story.pdf`, `F4.1_Final_Clean_Heatmap.pdf`, `F5_Bifurcation_Key_TFs.pdf`, `F2.6_Pseudotime_Density_Celltype_Tracks.*`, `F3.1_APOBEC3A_*` | These are publication-figure construction blocks rather than core reproducible analysis steps. |
+| Late-stage figure polish: `MainFigure_Top20_Complete_Story.pdf`, `F4.1_Final_Clean_Heatmap.pdf`, `F5_Bifurcation_Key_TFs.pdf`, `F2.6_Pseudotime_Density_Celltype_Tracks.*`, `F3.1_APOBEC3A_*` | These are publication-figure construction blocks rather than core reproducible analysis steps. S2.6 AUCell plots are now automated separately. |
 | `untitled9.R` selected metabolic pathway heatmap | Scratch plotting script depends on objects already in memory. |
 
 ## Validation Performed
