@@ -26,4 +26,5 @@ Imports:
     msigdbr,
     GSVA,
     limma,
-    ggrepel
+    ggrepel,
+    AUCell

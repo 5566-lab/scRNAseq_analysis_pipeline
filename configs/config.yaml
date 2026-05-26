@@ -32,6 +32,7 @@ outputs:
   mo_ma_rds: results/interim/mo_ma_result.rds
   hdwgcnna_rds: results/hdWGCNA/Mo_Ma/data.rds
   macspectrum_rds: results/hdWGCNA/Mo_Ma/data_scored.rds
+  auc_scored_rds: results/hdWGCNA/Mo_Ma/data_auc_scored.rds
   pseudotime_rds: results/monocle3/data_pseudotime.rds
 
 qc:
@@ -82,6 +83,12 @@ macspectrum:
   assay: RNA
   slot: data
   species: hum
+
+auc_signatures:
+  marker_table: results/tables/ST2_Ma_Mo_Marker.csv
+  mono_cluster_label: Classical Mono
+  mono_top_n: 100
+  ncores: 16
 
 pathway:
   output_dir: results/GSEA_GSVA

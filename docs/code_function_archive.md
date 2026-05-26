@@ -22,6 +22,7 @@ Source directory: `/public3/DSC/single_cell/GSE159677_Carotid_MainProject`
 | `scripts/02_integrate_cluster.R` | QC, integration, clustering, marker output blocks from `single_cell.R`. |
 | `scripts/03_hdWGCNA_mo_ma.R` | Latest Mo/Ma hdWGCNA workflow from `hdWGCNA/Mo_Ma/MM_WGCNA.R`. |
 | `scripts/04_macSpectrum_scores.R` | MPI/AMDI scoring from `macSpectrum.R`. |
+| `scripts/04b_auc_macrophage_signatures.R` | Custom M1/M2/Mono immaturity AUCell gene-set scoring from `single_cell.R`. |
 | `scripts/05_monocle_pseudotime.R` | Trajectory workflow from `monocle3/monocle_MM/MM_monocle.R`. |
 | `scripts/06_gsea_gsva.R` | scMetabolism, GSEA, GSVA, APOBEC3A-KO comparison from `GSEA/GSEA_GSVA.R`. |
 

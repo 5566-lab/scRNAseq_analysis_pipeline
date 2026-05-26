@@ -7,6 +7,7 @@ steps <- c(
   "scripts/02_integrate_cluster.R",
   "scripts/03_hdWGCNA_mo_ma.R",
   "scripts/04_macSpectrum_scores.R",
+  "scripts/04b_auc_macrophage_signatures.R",
   "scripts/05_monocle_pseudotime.R",
   "scripts/06_gsea_gsva.R"
 )

@@ -11,7 +11,10 @@ source("R/utils/config.R")
 source("R/utils/seurat_io.R")
 
 cfg <- load_config()
-input_rds <- project_path(cfg, cfg$outputs$macspectrum_rds)
+input_rds <- project_path(cfg, cfg$outputs$auc_scored_rds)
+if (!file.exists(input_rds)) {
+  input_rds <- project_path(cfg, cfg$outputs$macspectrum_rds)
+}
 if (!file.exists(input_rds)) {
   input_rds <- project_path(cfg, cfg$outputs$hdwgcnna_rds)
 }
@@ -90,4 +93,3 @@ trace_genes <- graph_test(cds, neighbor_graph = "principal_graph", cores = cfg$p
 safe_write_csv(trace_genes, file.path(out_dir, "trace_genes.csv"), row.names = TRUE)
 
 message_step("Saved Monocle3 outputs: ", out_dir)
-

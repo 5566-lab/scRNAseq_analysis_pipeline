@@ -8,8 +8,9 @@ Configuration-driven R pipeline for carotid atherosclerosis single-cell analysis
 2. `scripts/02_integrate_cluster.R` performs QC, integration, clustering, marker detection, and annotation-ready outputs.
 3. `scripts/03_hdWGCNA_mo_ma.R` runs hdWGCNA on monocyte/macrophage subsets.
 4. `scripts/04_macSpectrum_scores.R` adds MPI and AMDI macrophage state scores.
-5. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
-6. `scripts/06_gsea_gsva.R` performs metabolism scoring, GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
+5. `scripts/04b_auc_macrophage_signatures.R` computes custom AUCell M1/M2/Mono immaturity scores from the curated gene sets in the source script.
+6. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
+7. `scripts/06_gsea_gsva.R` performs metabolism scoring, GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
 
 Run the full pipeline:
 
