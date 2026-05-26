@@ -13,9 +13,6 @@ source("R/utils/seurat_io.R")
 cfg <- load_config()
 input_rds <- project_path(cfg, cfg$outputs$auc_scored_rds)
 if (!file.exists(input_rds)) {
-  input_rds <- project_path(cfg, cfg$outputs$macspectrum_rds)
-}
-if (!file.exists(input_rds)) {
   input_rds <- project_path(cfg, cfg$outputs$hdwgcnna_rds)
 }
 message_step("Loading object for Monocle3: ", input_rds)

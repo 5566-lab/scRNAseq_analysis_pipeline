@@ -1,7 +1,7 @@
 Package: GSE159677CarotidPipeline
 Title: Carotid Atherosclerosis Single-Cell Analysis Pipeline
 Version: 0.1.0
-Description: Configuration-driven R scripts for Seurat integration, hdWGCNA, Monocle3, macSpectrum, GSEA, and GSVA analyses.
+Description: Configuration-driven R scripts for Seurat integration, hdWGCNA, custom AUCell macrophage signature scoring, Monocle3, GSEA, and GSVA analyses.
 Encoding: UTF-8
 License: MIT
 Depends: R (>= 4.2.0)

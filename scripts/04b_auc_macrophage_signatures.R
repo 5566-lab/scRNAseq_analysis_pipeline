@@ -83,10 +83,7 @@ load_mono_immaturity_genes <- function(cfg, obj) {
     pull(gene)
 }
 
-input_rds <- project_path(cfg, cfg$outputs$macspectrum_rds)
-if (!file.exists(input_rds)) {
-  input_rds <- project_path(cfg, cfg$outputs$hdwgcnna_rds)
-}
+input_rds <- project_path(cfg, cfg$outputs$hdwgcnna_rds)
 message_step("Loading object for custom AUCell scoring: ", input_rds)
 obj <- readRDS(input_rds)
 

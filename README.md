@@ -1,16 +1,23 @@
 # GSE159677 Carotid Single-Cell Analysis
 
-Configuration-driven R pipeline for carotid atherosclerosis single-cell analysis, including Seurat integration, monocyte/macrophage hdWGCNA, macSpectrum scoring, Monocle3 pseudotime analysis, and GSEA/GSVA pathway comparison with APOBEC3A-KO RNA-seq results.
+Configuration-driven R pipeline for carotid atherosclerosis single-cell analysis, including Seurat integration, monocyte/macrophage hdWGCNA, custom AUCell M1/M2 macrophage signature scoring, Monocle3 pseudotime analysis, and GSEA/GSVA pathway comparison with APOBEC3A-KO RNA-seq results.
 
 ## Pipeline
 
 1. `scripts/01_prepare_seurat_objects.R` builds per-study Seurat objects from public count matrices.
 2. `scripts/02_integrate_cluster.R` performs QC, integration, clustering, marker detection, and annotation-ready outputs.
 3. `scripts/03_hdWGCNA_mo_ma.R` runs hdWGCNA on monocyte/macrophage subsets.
-4. `scripts/04_macSpectrum_scores.R` adds MPI and AMDI macrophage state scores.
-5. `scripts/04b_auc_macrophage_signatures.R` computes custom AUCell M1/M2/Mono immaturity scores from the curated gene sets in the source script.
-6. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
-7. `scripts/06_gsea_gsva.R` performs metabolism scoring, GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
+4. `scripts/04b_auc_macrophage_signatures.R` computes custom AUCell M1/M2/Mono immaturity scores from the curated gene sets in the source script.
+5. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
+6. `scripts/06_gsea_gsva.R` performs metabolism scoring, GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
+
+Optional auxiliary scoring:
+
+```bash
+Rscript scripts/04_macSpectrum_scores.R --config configs/config.yaml
+```
+
+`04_macSpectrum_scores.R` uses the `macSpectrum` package model and is not part of the default pipeline. The default macrophage polarization and maturation indices are the AUCell scores from `single_cell.R`.
 
 Run the full pipeline:
 
