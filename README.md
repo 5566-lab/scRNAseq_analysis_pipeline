@@ -1,6 +1,6 @@
-# GSE159677 Carotid Single-Cell Analysis
+# scRNA-seq Analysis Pipeline
 
-Configuration-driven R pipeline for carotid atherosclerosis single-cell analysis, including Seurat integration, monocyte/macrophage hdWGCNA, custom AUCell M1/M2 macrophage signature scoring, Monocle3 pseudotime analysis, and GSEA/GSVA pathway comparison with APOBEC3A-KO RNA-seq results.
+Configuration-driven R pipeline for public scRNA-seq analysis, including Seurat integration, monocyte/macrophage hdWGCNA, custom AUCell M1/M2 macrophage signature scoring, Monocle3 pseudotime analysis, and GSEA/GSVA pathway comparison with APOBEC3A-KO RNA-seq results.
 
 ## Pipeline
 
