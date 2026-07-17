@@ -28,5 +28,7 @@ Imports:
     limma,
     ggrepel,
     AUCell,
+    BiocParallel,
     ggpubr,
+    scales,
     showtext

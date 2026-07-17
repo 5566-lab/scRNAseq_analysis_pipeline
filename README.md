@@ -7,11 +7,14 @@ Configuration-driven R pipeline for public scRNA-seq analysis, including Seurat 
 1. `scripts/01_prepare_seurat_objects.R` builds per-study Seurat objects from public count matrices.
 2. `scripts/02_integrate_cluster.R` performs QC, integration, clustering, marker detection, and annotation-ready outputs.
 3. `scripts/03_hdWGCNA_mo_ma.R` runs hdWGCNA on monocyte/macrophage subsets.
-4. `scripts/04b_auc_macrophage_signatures.R` computes custom AUCell M1/M2/Mono immaturity scores from the curated gene sets in the source script.
-5. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
-6. `scripts/06_gsea_gsva.R` performs GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
+4. `scripts/04b_auc_macrophage_signatures.R` computes the original AUCell MPI and the external-consensus AUCell MMI.
+5. `scripts/04c_publication_mpi_mmi_plots.R` regenerates the original-style MPI/MMI figures and performs biological-sample-level statistical tests.
+6. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
+7. `scripts/06_gsea_gsva.R` performs GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
 
-The AUCell step also regenerates the S2.6 MPI/AMDI violin plots, LAM/Foam-cell density plot, and Foam marker violin panels with the updated font sizing.
+The external-consensus MMI uses frozen GSE5099, GSE11864, and HPCA-derived gene sets. The separately curated C1Q module is excluded, and six genes with inconsistent directions across external sources are removed from both sides before scoring. Individual C1Q-family genes remain eligible when independently selected by HPCA or either GEO signature. The final score is `AUCell(mature-positive) - AUCell(monocyte/immature-negative)`, with 476 genes in each direction. No marker is selected from the carotid study data.
+
+The publication plotting step regenerates the original MPI/MMI UMAP, bar, violin, and LAM/Foam-cell density layouts. Inferential tests use biological-sample medians or paired patients rather than treating individual cells as independent replicates. See `docs/external_consensus_mmi_method.md` for the full method and reporting notes.
 
 Optional auxiliary scoring:
 
@@ -19,7 +22,7 @@ Optional auxiliary scoring:
 Rscript scripts/04_macSpectrum_scores.R --config configs/config.yaml
 ```
 
-`04_macSpectrum_scores.R` uses the `macSpectrum` package model and is not part of the default pipeline. The default macrophage polarization and maturation indices are the AUCell scores from `single_cell.R`.
+`04_macSpectrum_scores.R` uses the `macSpectrum` package model and is not part of the default pipeline. The default polarization index retains the original M1-minus-M2 AUCell definition; the default maturation index is the fixed external-consensus AUCell difference described above.
 
 Run the full pipeline:
 

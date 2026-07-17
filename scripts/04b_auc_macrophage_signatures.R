@@ -59,50 +59,72 @@ m2_features <- c(
   "VPS50", "VTCN1", "WDR64", "WDR81", "WNT7B"
 )
 
-load_mono_immaturity_genes <- function(cfg, obj) {
-  marker_table <- project_path(cfg, cfg$auc_signatures$marker_table)
-  if (file.exists(marker_table)) {
-    markers <- read.csv(marker_table, check.names = FALSE)
-    return(markers |>
-      filter(cluster == cfg$auc_signatures$mono_cluster_label) |>
-      arrange(p_val_adj, desc(avg_log2FC)) |>
-      slice_head(n = cfg$auc_signatures$mono_top_n) |>
-      pull(gene) |>
-      unique())
+load_external_mmi_gene_sets <- function(cfg, obj) {
+  gene_set_file <- project_path(cfg, cfg$auc_signatures$external_mmi_gene_sets)
+  if (!file.exists(gene_set_file)) {
+    stop("External MMI gene-set file does not exist: ", gene_set_file, call. = FALSE)
+  }
+  gene_set_table <- read.csv(gene_set_file, stringsAsFactors = FALSE)
+  required_columns <- c("direction", "gene_symbol")
+  if (!all(required_columns %in% colnames(gene_set_table))) {
+    stop("External MMI gene-set file must contain: ", paste(required_columns, collapse = ", "), call. = FALSE)
   }
 
-  cell_col <- cfg$cell_types$cell_type_column
-  if (!cell_col %in% colnames(obj@meta.data)) {
-    warning("No marker table or cell-type column found; Mono_Immaturity_Score will be skipped")
-    return(character())
+  mature <- unique(gene_set_table$gene_symbol[
+    gene_set_table$direction == "mature_positive"
+  ])
+  immature <- unique(gene_set_table$gene_symbol[
+    gene_set_table$direction == "immature_negative"
+  ])
+  conflicts <- intersect(mature, immature)
+  if (length(conflicts) > 0) {
+    stop("External MMI directions overlap: ", paste(conflicts, collapse = ", "), call. = FALSE)
   }
-  Idents(obj) <- cell_col
-  markers <- FindMarkers(obj, ident.1 = cfg$auc_signatures$mono_cluster_label, only.pos = TRUE)
-  markers |>
-    tibble::rownames_to_column("gene") |>
-    arrange(p_val_adj, desc(avg_log2FC)) |>
-    slice_head(n = cfg$auc_signatures$mono_top_n) |>
-    pull(gene)
+
+  detected <- rownames(obj[["RNA"]])
+  sets <- list(
+    External_Mature_AUCell = intersect(mature, detected),
+    External_Monocyte_Immaturity_AUCell = intersect(immature, detected)
+  )
+  if (any(lengths(sets) < 50L)) {
+    stop("Fewer than 50 external MMI genes were detected in one direction.", call. = FALSE)
+  }
+  sets
 }
 
 input_rds <- project_path(cfg, cfg$outputs$hdwgcnna_rds)
-message_step("Loading object for custom AUCell scoring: ", input_rds)
+message_step("Loading object for original MPI and external-consensus MMI scoring: ", input_rds)
 obj <- readRDS(input_rds)
 
-mono_features <- load_mono_immaturity_genes(cfg, obj)
-gene_sets <- list(M1_Score = m1_features, M2_Score = m2_features)
-if (length(mono_features) > 0) {
-  gene_sets$Mono_Immaturity_Score <- mono_features
-}
+external_mmi_sets <- load_external_mmi_gene_sets(cfg, obj)
+gene_sets <- c(
+  list(M1_Score = m1_features, M2_Score = m2_features),
+  external_mmi_sets
+)
 
-expr <- GetAssayData(obj, assay = "RNA", slot = "counts")
-rankings <- AUCell_buildRankings(expr, nCores = cfg$auc_signatures$ncores, plotStats = FALSE)
-auc <- AUCell_calcAUC(gene_sets, rankings)
+expr <- GetAssayData(obj, assay = "RNA", layer = "counts")
+rankings <- AUCell_buildRankings(
+  expr,
+  plotStats = FALSE,
+  splitByBlocks = TRUE,
+  BPPARAM = BiocParallel::MulticoreParam(
+    workers = cfg$auc_signatures$ncores
+  )
+)
+auc_max_rank <- ceiling(cfg$auc_signatures$auc_max_rank_fraction * nrow(rankings))
+auc <- AUCell_calcAUC(
+  gene_sets,
+  rankings,
+  normAUC = TRUE,
+  aucMaxRank = auc_max_rank,
+  nCores = 1
+)
 auc_scores <- as.data.frame(t(getAUC(auc)))
 
 auc_scores <- auc_scores |>
   mutate(
-    AMDI_Index = if ("Mono_Immaturity_Score" %in% colnames(auc_scores)) -Mono_Immaturity_Score else NA_real_,
+    MMI_AUCell_noC1Q = External_Mature_AUCell - External_Monocyte_Immaturity_AUCell,
+    AMDI_Index = MMI_AUCell_noC1Q,
     Polarization_Index = M1_Score - M2_Score
   )
 
@@ -110,8 +132,15 @@ obj <- AddMetaData(obj, auc_scores)
 out_rds <- project_path(cfg, cfg$outputs$auc_scored_rds)
 safe_save_rds(obj, out_rds)
 
-plot_dir <- project_path(cfg, "results/figures/auc_macrophage_signatures")
+plot_dir <- project_path(
+  cfg,
+  "results/figures/legacy_cell_level_auc_plots_NOT_FOR_INFERENCE"
+)
 ensure_dir(plot_dir)
+warning(
+  "Plots from 04b preserve the legacy cell-level display only. ",
+  "Use outputs from 04c_publication_mpi_mmi_plots.R for inference."
+)
 cell_col <- cfg$cell_types$cell_type_column
 
 setup_plot_font <- function(cfg) {
@@ -354,4 +383,4 @@ if (length(target_genes) > 0 && ncol(sub_data_foam) > 0) {
   save_plot_pair(combined_violin_plots, "S2.6_Top10_Foam_Markers_VlnPlot_fontPlus2", 15, 15)
 }
 
-message_step("Saved custom AUCell-scored object and S2.6 plots: ", out_rds)
+message_step("Saved original MPI and external-consensus MMI scores: ", out_rds)

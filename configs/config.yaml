@@ -97,9 +97,10 @@ macspectrum:
   species: hum
 
 auc_signatures:
-  marker_table: results/tables/ST2_Ma_Mo_Marker.csv
-  mono_cluster_label: Classical Mono
-  mono_top_n: 100
+  external_mmi_gene_sets: data/gene_sets/external_consensus_mmi_no_c1q.csv
+  external_mmi_source_gene_sets: data/gene_sets/external_consensus_mmi_no_c1q_sources.csv
+  publication_output_dir: results/figures/mmi_auc_external_consensus_no_c1q
+  auc_max_rank_fraction: 0.05
   ncores: 16
   font_family: Arial
   fonts:
