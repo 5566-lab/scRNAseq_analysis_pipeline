@@ -16,33 +16,33 @@ align_umap_plots <- function(plot_AC, plot_PA) {
   pa_range <- layer_scales(plot_PA)$x$range$range  # 获取PA组的x轴范围
   x_min <- min(ac_range[1], pa_range[1])          # 计算x轴最小值
   x_max <- max(ac_range[2], pa_range[2])          # 计算x轴最大值
-  
+
   # 同理获取y轴范围
   y_range <- range(layer_scales(plot_AC)$y$range$range,
                    layer_scales(plot_PA)$y$range$range)
   y_min <- y_range[1]
   y_max <- y_range[2]
-  
+
   # 应用统一坐标范围和比例
-  plot_AC <- plot_AC + 
+  plot_AC <- plot_AC +
     coord_fixed(ratio = 1, xlim = c(x_min, x_max), ylim = c(y_min, y_max)) +
     theme(
       aspect.ratio = 1,           # 确保画布为正方形
       plot.margin = margin(5,5,5,5)  # 统一边距
     )
-  
-  plot_PA <- plot_PA + 
+
+  plot_PA <- plot_PA +
     coord_fixed(ratio = 1, xlim = c(x_min, x_max), ylim = c(y_min, y_max)) +
     theme(
       aspect.ratio = 1,
       plot.margin = margin(5,5,5,5)
     )
-  
+
   # 使用patchwork精确对齐
-  p <- (plot_AC | plot_PA) + 
-    plot_layout(guides = 'collect') & 
+  p <- (plot_AC | plot_PA) +
+    plot_layout(guides = 'collect') &
     theme(legend.position = 'bottom')
-  
+
   # 返回对齐后的图
   return(p)
 }
@@ -154,9 +154,9 @@ write.csv(hub_df,file.path(output_hdWGCNA,"data_genes.csv"))
 # 绘制树状图与热图
 pdf(file = file.path(output_hdWGCNA, "data_Dendrogram1.pdf"),width=10, height=8)
 plotEigengeneNetworks(
-  MEs, 
-  "Eigengene dendrogram", 
-  plotHeatmaps = FALSE, 
+  MEs,
+  "Eigengene dendrogram",
+  plotHeatmaps = FALSE,
   marDendro = c(0, 4, 2, 0)
 )
 
@@ -165,9 +165,9 @@ dev.off()
 pdf(file = file.path(output_hdWGCNA, "data_Heatmaps.pdf"),width=10, height=8)
 par(mar = c(5, 5, 4, 2))
 plotEigengeneNetworks(
-  MEs, 
-  "Eigengene adjacency heatmap", 
-  plotDendrograms = FALSE, 
+  MEs,
+  "Eigengene adjacency heatmap",
+  plotDendrograms = FALSE,
   xLabelsAngle = 90,
   marHeatmap = c(6, 6, 4, 2)  # 热图边距：下、左、上、右（原下边距10→6，上边距1→4）
 )
@@ -182,11 +182,11 @@ plot_list <- ModuleFeaturePlot(
   data,
   features = 'MEs',  # 绘制模块特征基因（hMEs）
   order = TRUE,       # 按 hMEs 值从高到低排序点
-  
+
 )
 
 # 组合图形并调整布局
-combined_plot <- wrap_plots(plot_list, ncol = 3) + 
+combined_plot <- wrap_plots(plot_list, ncol = 3) +
   plot_annotation(
     title = "Module Feature Plots",
     theme = theme(
@@ -212,17 +212,17 @@ dev.off()
 desired_order <- c("blue", "brown", "green","yellow",'turquoise','purple','grey','black',"magenta",'greenyellow','pink','tan','red')  # 按实际组名修改
 mods_ordered <- mods[match(desired_order, mods)]
 p <- DotPlot(
-  data, 
-  features = mods_ordered, 
+  data,
+  features = mods_ordered,
   group.by = 'metacell_grouping',
   scale = FALSE,
   dot.scale = 6,
   cols = c('blue', 'red')
-) + 
+) +
   # 添加标题并设置样式
-  labs(title = "Macrophage Module Expression Heatmap") + 
+  labs(title = "Macrophage Module Expression Heatmap") +
   # 交换XY轴
-  coord_flip() + 
+  coord_flip() +
   # 统一主题设置
   theme(
     plot.title = element_text(
@@ -250,7 +250,7 @@ print(p)
 
 # 保存高清PDF(推荐矢量图格式)
 ggsave(
-  file.path(output_hdWGCNA, "Mono_module.pdf"), 
+  file.path(output_hdWGCNA, "Mono_module.pdf"),
   plot = p,
   width = 8,   # 加宽以适应Y轴长标签[3](@ref)
   height = 7,  # 增加高度显示完整模块名
@@ -284,16 +284,16 @@ for (module in modules) {
   # 提取模块表达值并移除NA值
   expr_AC <- na.omit(meta_data[meta_data$AC_PA == "atherosclerotic core", module])
   expr_PA <- na.omit(meta_data[meta_data$AC_PA == "proximal adjacent", module])
-  
+
   # 检查有效样本量（每组至少1个样本）
   if (length(expr_AC) < 1 | length(expr_PA) < 1) {
     warning(paste0("Skipping module ", module, ": PA组或AC组有效样本不足（AC=", length(expr_AC), ", PA=", length(expr_PA), "）"))
     next  # 跳过当前模块
   }
-  
+
   # 执行Wilcoxon秩和检验
   wilcox_test <- wilcox.test(expr_AC, expr_PA)
-  
+
   # 存储结果
   results <- rbind(results, data.frame(
     Module = module,
@@ -327,11 +327,11 @@ Module_Colors <- c(
 ggplot(results, aes(x = mean_AC - mean_PA, y = log_p, color = Module)) +
   geom_point(size = 3) +
   geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "red") +
-  labs(title = "Module Differential Expression", 
-       x = "Effect Size (AC - PA)", 
+  labs(title = "Module Differential Expression",
+       x = "Effect Size (AC - PA)",
        y = "-log10(Adjusted p-value)") +
   theme_classic() +
-  scale_color_manual(values = Module_Colors)  
+  scale_color_manual(values = Module_Colors)
 
 
 
@@ -345,24 +345,24 @@ output_root_GO <- file.path(output_hdWGCNA, "GO")
 
 for (i in seq_along(modules_list)) {
   # 获取当前模块名称（假设已命名）
-  module_name <- names(modules_list)[i] 
+  module_name <- names(modules_list)[i]
   # 若未命名，自动生成名称（如"Module1"）
   if(is.null(module_name)) module_name <- paste0("Module", i)
-  
+
   # 创建模块专属文件夹
   module_dir <- file.path(output_root, module_name)
   if(!dir.exists(module_dir)) dir.create(module_dir, recursive = TRUE)
-  
+
   # 提取当前模块数据
   module_df <- modules_list[[i]]
-  
+
   # 遍历模块中的颜色分组
   co <- as.data.frame(unique(module_df$color))
-  
+
   for (j in 1:nrow(co)) {
     mc <- co[j, 1]
     ge <- data.frame(Name = module_df[module_df$color == mc, 2])
-    
+
     # GO富集分析
     GO <- enrichGO(
       gene = ge$Name,
@@ -374,18 +374,18 @@ for (i in seq_along(modules_list)) {
       qvalueCutoff = 1,
       readable = TRUE
     )
-    
+
     if (nrow(GO@result) > 0) {
       # 构建文件路径前缀
       file_prefix <- file.path(module_dir, mc)
-      
+
       # 保存CSV结果
       write.csv(
         data.frame(ID = row.names(GO@result), GO@result),
         file = paste0(file_prefix, "_GO.csv"),
         row.names = FALSE
       )
-      
+
       # 生成并保存可视化
       p <- barplot(GO, drop = TRUE, showCategory = 30) +
         ggtitle(paste0("GO Enrichment for : ", mc)) +
@@ -394,7 +394,7 @@ for (i in seq_along(modules_list)) {
           axis.text.y = element_text(size = 8)
         ) +
         scale_y_discrete(labels = function(x) str_wrap(x, width = 100))
-      
+
       ggsave(
         filename = paste0(file_prefix, ".pdf"),
         plot = p,
@@ -402,7 +402,7 @@ for (i in seq_along(modules_list)) {
         height = 8
       )
     }
-    
+
     # 清理临时对象
     rm(mc, ge, GO, p)
     gc()
@@ -423,13 +423,13 @@ p <- ggplot(data = turquoise, aes(x = Description, y = Score)) +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_blank(),
-        axis.text = element_text(size = 10, color = "black"), 
+        axis.text = element_text(size = 10, color = "black"),
         axis.ticks.y = element_blank(),
         axis.text.y = element_blank(),
         axis.line.x = element_line(colour = "black"),
         plot.title = element_text(hjust = 0.5, size = 14)) +
   geom_hline(yintercept = 0, color = "black") +
-  coord_flip() +  
+  coord_flip() +
   geom_text(data = turquoise, aes(x = Description, y = max(Score)/30, label = Description),
             hjust = 0, size = 4.5,  color = "black")
 
@@ -456,33 +456,33 @@ align_umap_plots <- function(plot_AC, plot_PA) {
   pa_range <- layer_scales(plot_PA)$x$range$range  # 获取PA组的x轴范围
   x_min <- min(ac_range[1], pa_range[1])          # 计算x轴最小值
   x_max <- max(ac_range[2], pa_range[2])          # 计算x轴最大值
-  
+
   # 同理获取y轴范围
   y_range <- range(layer_scales(plot_AC)$y$range$range,
                    layer_scales(plot_PA)$y$range$range)
   y_min <- y_range[1]
   y_max <- y_range[2]
-  
+
   # 应用统一坐标范围和比例
-  plot_AC <- plot_AC + 
+  plot_AC <- plot_AC +
     coord_fixed(ratio = 1, xlim = c(x_min, x_max), ylim = c(y_min, y_max)) +
     theme(
       aspect.ratio = 1,           # 确保画布为正方形
       plot.margin = margin(5,5,5,5)  # 统一边距
     )
-  
-  plot_PA <- plot_PA + 
+
+  plot_PA <- plot_PA +
     coord_fixed(ratio = 1, xlim = c(x_min, x_max), ylim = c(y_min, y_max)) +
     theme(
       aspect.ratio = 1,
       plot.margin = margin(5,5,5,5)
     )
-  
+
   # 使用patchwork精确对齐
-  p <- (plot_AC | plot_PA) + 
-    plot_layout(guides = 'collect') & 
+  p <- (plot_AC | plot_PA) +
+    plot_layout(guides = 'collect') &
     theme(legend.position = 'bottom')
-  
+
   # 返回对齐后的图
   return(p)
 }
@@ -538,7 +538,7 @@ cds_MM <- learn_graph(
   )
 )
 
-cds_partition <- plot_cells(cds_MM, color_cells_by="partition",group_label_size = 4,) 
+cds_partition <- plot_cells(cds_MM, color_cells_by="partition",group_label_size = 4,)
 
 ggsave(cds_partition,filename = '/public3/DSC/single_cell/GSE159677/monocle3/monocle/S1.5_monocle_partition.png',width = 18,height = 8)
 ggsave(cds_partition,filename = '/public3/DSC/single_cell/GSE159677/monocle3/monocle/S1.5_monocle_partition.pdf',width = 18,height = 8)
@@ -574,7 +574,7 @@ cds_MM_foam <- learn_graph(
     #prune_graph = TRUE         # 启用自动修剪分支
   )
 )
-plot_cells(cds_MM_foam, 
+plot_cells(cds_MM_foam,
            color_cells_by ="seurat_clusters", #'AC_PA',#"Celltype_raw1", #"pseudotime",
            #genes = "APOBEC3A",
            cell_size = 1.5,
@@ -589,7 +589,7 @@ p <- plot_cells(
   label_groups_by_cluster = FALSE,
   group_label_size = 4,
   show_trajectory_graph = TRUE
-) + 
+) +
   facet_wrap(~AC_PA, nrow = 1) +  # 横向分面（左右布局）
   theme(
     strip.text = element_text(size = 12),  # 分面标题字体
@@ -609,21 +609,21 @@ p <- plot_cells(
   cell_size = 1.5,
   group_label_size = 4,
   show_trajectory_graph = TRUE
-) + 
+) +
   facet_wrap(~AC_PA, nrow = 1) +  # 横向分面（左右布局）
   theme(
     strip.text = element_text(size = 12),  # 分面标题字体
     strip.background = element_blank()     # 分面标题背景透明
-  )+ 
+  )+
   scale_color_gradient(
     low = "gray90",            # 低表达设为浅灰色
     high = "red3",             # 高表达设为深红色
     #breaks = c(0, 2, 5),       # 自定义颜色断点（根据实际表达范围调整）
     #limits = c(0, 5)           # 限制颜色映射范围（避免极端值影响对比度）
   ) +
-  labs(color = "APOBEC3A Expression")+ 
-  theme_dr() + theme(panel.grid=element_blank(), 
-                     plot.title = element_blank()) + NoLegend() 
+  labs(color = "APOBEC3A Expression")+
+  theme_dr() + theme(panel.grid=element_blank(),
+                     plot.title = element_blank()) + NoLegend()
 
 print(p)
 ggsave(p,filename = '/public3/DSC/single_cell/GSE159677/monocle3/monocle_MM/F2.5_monocle_APOBEC3A.png',width = 18,height = 8)
@@ -641,23 +641,23 @@ plot_AC <- plot_cells(
   label_cell_groups = FALSE,       # 关闭细胞群标签
   label_leaves = TRUE,             # 开启轨迹叶节点标签[1](@ref)
   label_branch_points = TRUE,      # 开启轨迹分支点标签[1](@ref)
-  trajectory_graph_color = "black", 
+  trajectory_graph_color = "black",
   # trajectory_graph_label_size = 5,  # 增大轨迹标签字体[1](@ref)
   cell_size = 1,
   alpha = 0.8
-) + 
+) +
   facet_wrap(~AC_PA, nrow = 1) +   # 分面展示AC和PA组
   theme(
     strip.text = element_text(size = 14, face = "bold", color = "black"),  # 分面标题加粗[2](@ref)
     strip.background = element_rect(fill = "#F5F5F5", color = NA),        # 分面标题背景色
     plot.margin = margin(20, 20, 20, 20)                                   # 调整边距防止标签被裁剪
-  ) + 
+  ) +
   scale_color_gradientn(
     colours = c('blue', 'cyan', 'green', 'yellow', 'orange', 'red'),       # 自定义伪时间色阶
     name = "Pseudotime",
     guide = guide_colorbar(barwidth = 1.5, title.position = "top")         # 调整图例位置和样式[2](@ref)
-  ) + 
-  theme_dr() + 
+  ) +
+  theme_dr() +
   theme(
     panel.grid = element_blank(),
     axis.title = element_text(size = 12),     # 坐标轴标题
@@ -666,9 +666,9 @@ plot_AC <- plot_cells(
     legend.text = element_text(size = 10)      # 图例数值
   )
 
-plot_AC 
+plot_AC
 
-plot_cells(cds_MM_foam, color_cells_by="partition",group_label_size = 4,) 
+plot_cells(cds_MM_foam, color_cells_by="partition",group_label_size = 4,)
 ###添加伪时序信息到 Seurat 中 #####
 data$pseudotime <- pseudotime(cds_MM_foam)
 summary(data$pseudotime)
@@ -713,19 +713,19 @@ subset_colors <- c("#1F77B4", "#FF7F0E", "#2CA02C", "#D62728", "#9467BD")[1:leng
 for(i in seq_along(subset_list)){
   # 提取当前子集名称对应的元数据列
   subset_col <- paste0("cdsMM_sub", i)
-  
+
   # 筛选属于当前子集的细胞
-  subset_cells <- data@meta.data %>% 
-    filter(!!sym(subset_col) == "Yes") %>% 
+  subset_cells <- data@meta.data %>%
+    filter(!!sym(subset_col) == "Yes") %>%
     rownames()
-  
+
   # 提取基因表达与伪时间数据
   subset_df <- data.frame(
     pseudotime = data@meta.data[subset_cells, "pseudotime"],
     APOBEC3A = GetAssayData(data, assay = "RNA", slot = "data")["APOBEC3A", subset_cells],
     subset = names(subset_list)[i]
   )
-  
+
   combined_data <- rbind(combined_data, subset_df)
 }
 
@@ -734,14 +734,14 @@ ggplot(combined_data, aes(x = pseudotime, y = APOBEC3A, color = subset)) +
   #geom_point(alpha = 0.6, size = 1.2) +  # 散点显示细胞分布
   geom_smooth(
     method = "gam",   # 采用GAM模型适应复杂轨迹[3](@ref)
-    formula = y ~ s(x, bs = "tp"), 
-    se = FALSE, 
+    formula = y ~ s(x, bs = "tp"),
+    se = FALSE,
     linewidth = 1.5,
     alpha = 0.8
   ) +
   # geom_smooth(method = "loess", se = FALSE, linewidth = 1.5) +  # 趋势线
   scale_color_manual(values = subset_colors,labels = c( "AC_Mono", "AC_Foam1","AC_Foam2") ) +
-  labs(x = "Pseudotime", y = "APOBEC3A Expression (log-normalized)", 
+  labs(x = "Pseudotime", y = "APOBEC3A Expression (log-normalized)",
        title = "APOBEC3A Expression Dynamics Across Trajectory Subsets") +
   theme_classic(base_size = 14) +
   theme(legend.position = "right",
@@ -766,20 +766,20 @@ ggplot(combined_data, aes(x = pseudotime, y = APOBEC3A, color = subset)) +
 cds_list <- lapply(groups, function(group) {
   # 筛选当前组的细胞ID
   cell_ids <- rownames(cell_metadata)[cell_metadata$AC_PA == group]
-  
+
   # 子集化表达矩阵（注意行列对应关系）
   sub_matrix <- expression_matrix[, colnames(expression_matrix) %in% cell_ids]
-  
+
   # 构建分组cds对象
   group_cds <- new_cell_data_set(
     sub_matrix,
     cell_metadata = cell_metadata[cell_ids, ],
     gene_metadata = gene_metadata
   )
-  
+
   # 导入对应的UMAP坐标（需与当前分组匹配）
   reducedDims(group_cds)$UMAP <- data@reductions$umap@cell.embeddings[cell_ids, ]
-  
+
   # 执行必须的聚类步骤
   cluster_cells(group_cds, reduction_method = "UMAP")
 })
@@ -788,7 +788,7 @@ cds_list <- lapply(groups, function(group) {
 names(cds_list) <- groups
 
 # 示例调用AC组的数据
-cdsMM_AC <- cds_list[["atherosclerotic core"]] 
+cdsMM_AC <- cds_list[["atherosclerotic core"]]
 cdsMM_PA <- cds_list[["proximal adjacent"]]
 
 cdsMM_AC <- learn_graph(
@@ -815,9 +815,9 @@ plot_AC <- plot_cells(
   #label_groups_by_cluster = FALSE,
   cell_size = 1,
   show_trajectory_graph = TRUE  # 确保轨迹图显示（默认已开启）
-)+ 
-  theme_dr() + theme(panel.grid=element_blank(), 
-                     plot.title = element_blank()) + NoLegend() 
+)+
+  theme_dr() + theme(panel.grid=element_blank(),
+                     plot.title = element_blank()) + NoLegend()
 
 plot_PA<- plot_cells(
   cdsMM_PA,
@@ -825,9 +825,9 @@ plot_PA<- plot_cells(
   #label_groups_by_cluster = FALSE,
   cell_size = 1,
   show_trajectory_graph = TRUE  # 确保轨迹图显示（默认已开启）
-)+ 
-  theme_dr() + theme(panel.grid=element_blank(), 
-                     plot.title = element_blank()) + NoLegend() 
+)+
+  theme_dr() + theme(panel.grid=element_blank(),
+                     plot.title = element_blank()) + NoLegend()
 
 seurat_clusters_plot <- align_umap_plots(plot_AC, plot_PA)
 seurat_clusters_plot
@@ -844,16 +844,16 @@ plot_AC <- plot_cells(
   label_cell_groups = FALSE,   # 关闭聚类标签
   cell_size = 1.5,             # 调整点大小
   show_trajectory_graph = TRUE # 显示轨迹骨架
-) + 
+) +
   scale_color_gradient(
     low = "gray90",            # 低表达设为浅灰色
     high = "red3",             # 高表达设为深红色
     #breaks = c(0, 2, 5),       # 自定义颜色断点（根据实际表达范围调整）
     #limits = c(0, 5)           # 限制颜色映射范围（避免极端值影响对比度）
   ) +
-  labs(color = "APOBEC3A Expression")+ 
-  theme_dr() + theme(panel.grid=element_blank(), 
-                     plot.title = element_blank()) + NoLegend() 
+  labs(color = "APOBEC3A Expression")+
+  theme_dr() + theme(panel.grid=element_blank(),
+                     plot.title = element_blank()) + NoLegend()
 
 plot_PA <- plot_cells(
   cdsMM_PA,
@@ -861,16 +861,16 @@ plot_PA <- plot_cells(
   label_cell_groups = FALSE,   # 关闭聚类标签
   cell_size = 1.5,             # 调整点大小
   show_trajectory_graph = TRUE # 显示轨迹骨架
-) + 
+) +
   scale_color_gradient(
     low = "gray90",            # 低表达设为浅灰色
     high = "red3",             # 高表达设为深红色
     #breaks = c(0, 2, 5),       # 自定义颜色断点（根据实际表达范围调整）
     #limits = c(0, 5)           # 限制颜色映射范围（避免极端值影响对比度）
   ) +
-  labs(color = "APOBEC3A Expression")+ 
-  theme_dr() + theme(panel.grid=element_blank(), 
-                     plot.title = element_blank()) + NoLegend() 
+  labs(color = "APOBEC3A Expression")+
+  theme_dr() + theme(panel.grid=element_blank(),
+                     plot.title = element_blank()) + NoLegend()
 
 plot_APOBEC3A <- align_umap_plots(plot_AC, plot_PA)
 ggsave(plot_APOBEC3A,filename = '/public3/DSC/single_cell/GSE159677/monocle3/monocle/F2.5_MM_APOBEC3A.png',width = 18,height = 8)
@@ -894,9 +894,9 @@ plot_AC <- plot_cells(cdsMM_AC,
   scale_color_gradientn(
     values = seq(0, 1, 0.2),
     colours = c('blue', 'cyan', 'green', 'yellow', 'orange', 'red'),name = "Pseudotime",
-  )+ 
-  theme_dr() + theme(panel.grid=element_blank(), 
-                     plot.title = element_blank()) + NoLegend() 
+  )+
+  theme_dr() + theme(panel.grid=element_blank(),
+                     plot.title = element_blank()) + NoLegend()
 
 plot_PA <- plot_cells(cdsMM_PA,
                       color_cells_by = "pseudotime",
@@ -909,9 +909,9 @@ plot_PA <- plot_cells(cdsMM_PA,
     values = seq(0, 1, 0.2),
     colours = c('blue', 'cyan', 'green', 'yellow', 'orange', 'red'),name = "Pseudotime",
     limits = c(0, 40)
-  )+ 
-  theme_dr() + theme(panel.grid=element_blank(), 
-                     plot.title = element_blank()) + NoLegend() 
+  )+
+  theme_dr() + theme(panel.grid=element_blank(),
+                     plot.title = element_blank()) + NoLegend()
 
 pseudotime_plot <- align_umap_plots(plot_AC, plot_PA)
 p<- plot_AC|plot_PA
@@ -927,8 +927,8 @@ ciliated_PA_test_res <- graph_test(cdsMM_AC, neighbor_graph = "principal_graph",
 write.csv(ciliated_AC_test_res,"/public3/DSC/single_cell/GSE159677/monocle3/monocle/ciliated_AC_test_res.csv")
 write.csv(ciliated_PA_test_res,"/public3/DSC/single_cell/GSE159677/monocle3/monocle/ciliated_PA_test_res.csv")
 
-plot_cells(cdsMM_AC, color_cells_by="partition") 
-plot_cells(cdsMM_PA, color_cells_by="partition") 
+plot_cells(cdsMM_AC, color_cells_by="partition")
+plot_cells(cdsMM_PA, color_cells_by="partition")
 
 ###添加伪时序信息到 Seurat 中 #####
 data$pseudotime <- pseudotime(cdsMM_PA)
@@ -982,26 +982,26 @@ data@meta.data[, grep("cdsMM_sub", colnames(data@meta.data))]
 # 创建合并绘图的数据框架
 combined_data <- data.frame()
 
-subset_colors <- c("#1F77B4", "#FF7F0E", "#2CA02C", "#D62728", "#9467BD", 
+subset_colors <- c("#1F77B4", "#FF7F0E", "#2CA02C", "#D62728", "#9467BD",
                    "#8C564B", "#E377C2")[1:length(subset_list)]
 
 # 循环处理每个子集
 for(i in seq_along(subset_list)){
   # 提取当前子集名称对应的元数据列
   subset_col <- paste0("cdsMM_sub", i)
-  
+
   # 筛选属于当前子集的细胞
-  subset_cells <- data@meta.data %>% 
-    filter(!!sym(subset_col) == "Yes") %>% 
+  subset_cells <- data@meta.data %>%
+    filter(!!sym(subset_col) == "Yes") %>%
     rownames()
-  
+
   # 提取基因表达与伪时间数据
   subset_df <- data.frame(
     pseudotime = data@meta.data[subset_cells, "pseudotime"],
     APOBEC3A = GetAssayData(data, assay = "RNA", slot = "data")["APOBEC3A", subset_cells],
     subset = names(subset_list)[i]
   )
-  
+
   combined_data <- rbind(combined_data, subset_df)
 }
 
@@ -1010,14 +1010,14 @@ ggplot(combined_data, aes(x = pseudotime, y = APOBEC3A, color = subset)) +
   #geom_point(alpha = 0.6, size = 1.2) +  # 散点显示细胞分布
   geom_smooth(
     method = "gam",   # 采用GAM模型适应复杂轨迹[3](@ref)
-    formula = y ~ s(x, bs = "tp"), 
-    se = FALSE, 
+    formula = y ~ s(x, bs = "tp"),
+    se = FALSE,
     linewidth = 1.5,
     alpha = 0.8
   ) +
  # geom_smooth(method = "loess", se = FALSE, linewidth = 1.5) +  # 趋势线
   scale_color_manual(values = subset_colors,labels = c( "AC_Foam", "PA_mono", "PA_foam") ) +
-  labs(x = "Pseudotime", y = "APOBEC3A Expression (log-normalized)", 
+  labs(x = "Pseudotime", y = "APOBEC3A Expression (log-normalized)",
        title = "APOBEC3A Expression Dynamics Across Trajectory Subsets") +
   theme_classic(base_size = 14) +
   theme(legend.position = "right",
@@ -1053,16 +1053,16 @@ for (module in modules) {
   # 提取模块表达值并移除NA值
   expr_AC <- na.omit(meta_data[meta_data$AC_PA == "atherosclerotic core", module])
   expr_PA <- na.omit(meta_data[meta_data$AC_PA == "proximal adjacent", module])
-  
+
   # 检查有效样本量（每组至少1个样本）
   if (length(expr_AC) < 1 | length(expr_PA) < 1) {
     warning(paste0("Skipping module ", module, ": PA组或AC组有效样本不足（AC=", length(expr_AC), ", PA=", length(expr_PA), "）"))
     next  # 跳过当前模块
   }
-  
+
   # 执行Wilcoxon秩和检验
   wilcox_test <- wilcox.test(expr_AC, expr_PA)
-  
+
   # 存储结果
   results <- rbind(results, data.frame(
     Module = module,
@@ -1096,21 +1096,21 @@ Module_Colors <- c(
 ggplot(results, aes(x = mean_AC - mean_PA, y = log_p, color = Module)) +
   geom_point(size = 3) +
   geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "red") +
-  labs(title = "Module Differential Expression", 
-       x = "Effect Size (AC - PA)", 
+  labs(title = "Module Differential Expression",
+       x = "Effect Size (AC - PA)",
        y = "-log10(Adjusted p-value)") +
   theme_classic() +
-  scale_color_manual(values = Module_Colors)  
+  scale_color_manual(values = Module_Colors)
 
 
 
 
 ######双起点
-selected_genes <- unique(c(module_gene_list$brown, module_gene_list$red, 
+selected_genes <- unique(c(module_gene_list$brown, module_gene_list$red,
                            module_gene_list$tan,module_gene_list$magenta,module_gene_list$blue
 ))
 
-selected_genes <- unique(c(module_gene_list$brown, module_gene_list$red, 
+selected_genes <- unique(c(module_gene_list$brown, module_gene_list$red,
                            module_gene_list$tan,module_gene_list$blue
 ))
 
@@ -1123,7 +1123,7 @@ main_pseudotime <- pseudotime(cds_MM_foam)  # 主图伪时间
 
 cdsMM_subset1 <- choose_graph_segments(cds_MM_foam)#疾病_foam
 subset1_cells <- colnames(cdsMM_subset1)
-reducedDims(cdsMM_subset1)$UMAP <- main_umap[subset1_cells, ]  
+reducedDims(cdsMM_subset1)$UMAP <- main_umap[subset1_cells, ]
 colData(cdsMM_subset1)$pseudotime <- main_pseudotime[subset1_cells]
 
 
@@ -1147,7 +1147,7 @@ p <- plot_cells(
   label_groups_by_cluster = FALSE,
   group_label_size = 4,
   show_trajectory_graph = TRUE
-) + 
+) +
   facet_wrap(~AC_PA, nrow = 1) +  # 横向分面（左右布局）
   theme(
     strip.text = element_text(size = 12),  # 分面标题字体
@@ -1158,7 +1158,7 @@ colData(cdsMM_subset2)$pseudotime <- main_pseudotime[subset2_cells]
 
 
 
-trace_genes2 <- graph_test(cdsMM_subset2, 
-                           neighbor_graph = "principal_graph", 
+trace_genes2 <- graph_test(cdsMM_subset2,
+                           neighbor_graph = "principal_graph",
                            cores = 4)
 write.csv(trace_genes,"/public3/DSC/single_cell/GSE159677/monocle3/monocle_MM/trace_genes2.csv")

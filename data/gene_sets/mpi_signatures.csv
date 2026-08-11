@@ -1,0 +1,311 @@
+gene_set,source,gene
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ACOD1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",AFDN
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",AIM1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",AKAP13
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ALAS1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ANKRD22
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",APOBEC3A
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",APOL2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",APOL3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",BST2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",C15orf48
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CALHM6
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",CCL18
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CCL19
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCL5
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCR10
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCR7
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CD1B
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CD274
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CD38
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD40
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD64
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD74
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD80
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD86
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CDC42SE2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",COG6
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CRYBG1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CSTF3
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CXCL10
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CXCL11
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",CXCL8
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CXCL9
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CXCR10
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",DEFA3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",EBI3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ELOVL5
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ENSA
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",EPSTI1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FAM177A1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FAM26F
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FAS
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FBP1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FBXO6
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FCGR1A
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FCGR1B
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FCGR1C
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FDX1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FUS
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",GBP1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GBP4
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GBP5
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GLS
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GPAT3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",HLA-A
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",HLA-DMA
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",HLA-DMB
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",HLA-DRA
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",HLA-DRB1
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",HLA-DRB3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",HSD11B1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",HSP90AB4P
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IDO1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",IFI44
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",IFIH1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",IFIT2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",IFIT3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",IFIT5
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL12
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL12A
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL12B
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL1A
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL1B
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL23
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL23A
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL6
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",IL8
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",INOS
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IRF1
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IRF5
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",IRG1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ISG15
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ISG20
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",KMO
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",KYNU
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",LAMP3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",LGALS3BP
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",LHFPL2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",LTF
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",LY75
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MARCKSL1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MFF
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MGEA5
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MGST1
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",MHCII
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MLLT4
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MRAS
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MT2A
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MX1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MX2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NDRG2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NFKB2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NMES1
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",NOS2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NT5C3A
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NUB1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",OAS2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",OAS3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",OASL
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",OGA
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",P2RX7
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PLAUR
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PLD1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PML
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PNPLA6
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PNPT1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PTGES
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PTGS2
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",PTX3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RBM17
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RCN1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RHOF
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RIPK2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RSAD2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLAMF1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLAMF7
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLC15A3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLC27A3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLC29A3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLC2A3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLC2A6
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SOAT1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SPN
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",STX11
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",TAP1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",TAP2
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",TAPBP
+MPI M1-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",TNF
+MPI M1-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",TNFA
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",TNFAIP3
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",TRAF1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",VAMP5
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",WARS
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",WARS1
+MPI M1-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",XIRP1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ABI3
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ACOT11
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ADAP1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ADAP2
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",ADORA3
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ALDH1A1
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",ALOX15
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",APPL2
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",ARG1
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",ARG2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ARHGAP26
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ARHGAP4
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ARSA
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ARSB
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",BABAM2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",BIN1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",BLVRB
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",BRE
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCL13
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCL17
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCL18
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCL20
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCL22
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCL24
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CCL4
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CD14
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD163
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CD163L1
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",CD200R
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD200R1
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD206
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CD209
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD23
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD274
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD276
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CD32
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CD36
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CHMP2A
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CLEC7A
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CNRIP1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",COMMD1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CRYL1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CSF1R
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CST3
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CTSA
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CTSB
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CTSC
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",CTSD
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CUL4B
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",CYB5R4
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",DAB2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",DCD
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",EGF
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",EMB
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",F13A1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FAH
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FASL
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FASLG
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FCER2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FCGR2A
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FCGR2B
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FCGR2C
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FCGR3A
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FCGRT
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FIGF
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",FN1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FOLR2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",FUCA1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GALE
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GAS7
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",GATA3
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GATM
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GLMP
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GLUL
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GNPDA1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GPR183
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",GRAMD4
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",HAVCR2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",HECTD3
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",HEXA
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",HEXB
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",HMOX1
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL10
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",IL17RB
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL1R2
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL1RA
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL1RN
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IL4R
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",IL4RA
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",IRF4
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ITSN1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",LACC1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",LGMN
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",LRP1
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",LYVE1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MANBA
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",MARCO
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",ME1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MGLL
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",MMP1
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",MMP12
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",MMP14
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",MMP19
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",MMP9
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MPEG1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",MPI
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",MRC1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",MSR1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NAIP
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NAPRT
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NDUFA4
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NDUFB3
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NEU1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NIF3L1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NLN
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NPL
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NUBP1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",NUDT2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",P2RY11
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PARP1
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",PDCD1LG2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PDPK1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PITHD1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PLA2G15
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PLXDC2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PMVK
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PREX1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",PRKCE
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",QPRT
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RASA1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RENBP
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RNASE6
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",RNASET2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SAR1B
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SDF4
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SDSL
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SERINC1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SERPINB2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SGPL1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLC9A9
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SLCO2B1
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",SOCS1
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",SOCS3
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics); Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",STAB1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",SYPL1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",TANGO2
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",TG
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6); Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",TGFB1
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",TGFB2
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",TGFB3
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",TGFBR2
+MPI M2-like signature,"Murray et al., 2014, Immunity (Core set compiled in Totu et al., 2025, Supplementary Table S6)",TGM2
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",TMEM176B
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",TNFSF12
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",TNFSF8
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",TRIM47
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",VEGFA
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",VEGFB
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",VEGFC
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",VEGFD
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",VPS50
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",VTCN1
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",WDR64
+MPI M2-like signature,"Totu et al., 2025, NAR Molecular Medicine, Supplementary Table S6 (Proteomics)",WDR81
+MPI M2-like signature,"Azizi et al., 2018, Cell, Supplementary Table S4 (compiled in Totu et al., 2025, Supplementary Table S6)",WNT7B

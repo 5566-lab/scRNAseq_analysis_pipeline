@@ -1,7 +1,8 @@
 #!/usr/bin/env Rscript
 
-# Score an external consensus MMI with the AUCell workflow used by single_cell.R.
-# The exploratory C1Q source module is excluded; directional conflicts are removed.
+# Final publication-oriented MPI/MMI analysis.
+# MMI uses exactly 200 source-balanced consensus genes per direction from
+# GSE5099 and GSE11864. Plot geometry follows single_cell.R.
 
 suppressPackageStartupMessages({
   library(Seurat)
@@ -16,23 +17,43 @@ suppressPackageStartupMessages({
   library(scales)
 })
 
-source("R/utils/config.R")
-source("R/utils/seurat_io.R")
+set.seed(20260730)
 
-cfg <- load_config()
-set.seed(cfg$project$seed)
-
-input_rds <- project_path(cfg, cfg$outputs$auc_scored_rds)
-source_gene_set_file <- project_path(
-  cfg, cfg$auc_signatures$external_mmi_source_gene_sets
+top_n <- 200L
+repo_root <- Sys.getenv(
+  "PIPELINE_REPO_ROOT",
+  unset = normalizePath(".", mustWork = TRUE)
 )
-out_dir <- project_path(cfg, cfg$auc_signatures$publication_output_dir)
-score_rds <- file.path(out_dir, "MMI_AUCell_noC1Q_cell_scores.rds")
+workspace_dir <- Sys.getenv(
+  "SCRNA_WORKSPACE_ROOT",
+  unset = "/public3/DSC/single_cell"
+)
+input_rds <- Sys.getenv(
+  "SCRNA_SCORED_RDS",
+  unset = file.path(workspace_dir, "Result", "figer_new", "hdWGCNA", "Mo_Ma", "data_scored.rds")
+)
+comparison_dir <- Sys.getenv(
+  "SCORING_OUTPUT_DIR",
+  unset = file.path(repo_root, "results", "scoring")
+)
+gene_membership_file <- file.path(
+  repo_root, "data", "gene_sets",
+  "MMI_GSE5099_GSE11864_Top200_membership.csv"
+)
+conflict_file <- file.path(
+  repo_root, "data", "gene_sets",
+  "MMI_GSE5099_GSE11864_Top200_direction_conflicts.csv"
+)
+comparison_score_rds <- file.path(
+  comparison_dir, "topN_MMI_AUCell_cell_scores.rds"
+)
+out_dir <- file.path(comparison_dir, "final_mpi_mmi")
+score_rds <- file.path(out_dir, "ConsensusTop200_MMI_AUCell_cell_scores.rds")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-mature_column <- "External_Mature_AUCell"
-immature_column <- "External_Monocyte_Immaturity_AUCell"
-mmi_column <- "MMI_AUCell_noC1Q"
+mature_column <- "Top200_Mature_AUCell"
+immature_column <- "Top200_Monocyte_AUCell"
+mmi_column <- "Top200_MMI"
 
 # Display controls only; they do not alter scores or statistical tests.
 mmi_color_quantiles <- c(0.02, 0.98)
@@ -50,64 +71,111 @@ save_plot <- function(filename, plot, width, height) {
   )
 }
 
-message("Preparing the external consensus gene sets...")
-source_sets <- read.csv(source_gene_set_file, stringsAsFactors = FALSE) %>%
-  filter(source_set != "C1Q_TissueMac_Core")
-
-expected_sources <- c(
-  "GSE5099_Macrophage", "GSE5099_Monocyte",
-  "GSE11864_Macrophage", "GSE11864_Monocyte",
-  "HPCA_Macrophage", "HPCA_Monocyte"
+message("Preparing the fixed GSE5099 + GSE11864 Top200 gene sets...")
+if (!file.exists(gene_membership_file)) {
+  stop("Top-N gene membership file not found: ", gene_membership_file)
+}
+membership_all <- read.csv(gene_membership_file, stringsAsFactors = FALSE)
+required_membership_columns <- c(
+  "top_n_final_per_direction", "direction", "consensus_rank", "gene_symbol",
+  "consensus_mean_percentile", "consensus_worst_source_percentile",
+  "GSE5099_rank_in_direction", "GSE11864_rank_in_direction",
+  "selected_in_GSE5099_individual_top200",
+  "selected_in_GSE11864_individual_top200"
 )
-missing_sources <- setdiff(expected_sources, unique(source_sets$source_set))
-if (length(missing_sources)) {
-  stop("Missing required source gene sets: ", paste(missing_sources, collapse = ", "))
+missing_membership_columns <- setdiff(
+  required_membership_columns, colnames(membership_all)
+)
+if (length(missing_membership_columns)) {
+  stop(
+    "Gene membership file is missing columns: ",
+    paste(missing_membership_columns, collapse = ", ")
+  )
 }
 
-positive_union <- unique(source_sets$gene_symbol[
-  source_sets$direction == "mature_positive"
-])
-negative_union <- unique(source_sets$gene_symbol[
-  source_sets$direction == "immature_negative"
-])
-conflicting_genes <- sort(intersect(positive_union, negative_union))
-mature_genes <- sort(setdiff(positive_union, conflicting_genes))
-immature_genes <- sort(setdiff(negative_union, conflicting_genes))
+membership <- membership_all %>%
+  filter(top_n_final_per_direction == top_n)
+if (!nrow(membership)) {
+  stop("No Top", top_n, " records found in the gene membership file.")
+}
+mature_genes <- sort(unique(
+  membership$gene_symbol[membership$direction == "mature_positive"]
+))
+immature_genes <- sort(unique(
+  membership$gene_symbol[membership$direction == "immature_negative"]
+))
+conflicting_genes <- if (file.exists(conflict_file)) {
+  read.csv(conflict_file, stringsAsFactors = FALSE) %>%
+    pull(gene_symbol) %>%
+    unique() %>%
+    sort()
+} else {
+  character()
+}
 
 if (length(intersect(mature_genes, immature_genes))) {
   stop("Positive and negative gene sets still overlap after conflict removal.")
 }
-if (length(mature_genes) < 50L || length(immature_genes) < 50L) {
-  stop("Too few genes remain after conflict removal.")
+if (length(mature_genes) != top_n || length(immature_genes) != top_n) {
+  stop("The frozen MMI signatures must contain exactly Top", top_n, " genes per direction.")
 }
 
 write.csv(
-  bind_rows(
-    tibble(direction = "mature_positive", gene_symbol = mature_genes),
-    tibble(direction = "immature_negative", gene_symbol = immature_genes)
-  ),
-  file.path(out_dir, "MMI_AUCell_noC1Q_clean_gene_sets.csv"),
+  membership,
+  file.path(out_dir, "Top200_MMI_gene_set_membership.csv"),
   row.names = FALSE
 )
 write.csv(
   tibble(gene_symbol = conflicting_genes, action = "removed_from_both_directions"),
-  file.path(out_dir, "MMI_AUCell_noC1Q_removed_conflicting_genes.csv"),
-  row.names = FALSE
-)
-write.csv(
-  source_sets,
-  file.path(out_dir, "MMI_AUCell_noC1Q_source_gene_sets.csv"),
+  file.path(out_dir, "Top200_MMI_removed_direction_conflicts.csv"),
   row.names = FALSE
 )
 
 message(
-  "Clean gene sets: ", length(mature_genes), " mature-positive and ",
-  length(immature_genes), " immature-negative genes; removed ",
-  length(conflicting_genes), " conflicts."
+  "Fixed Top200 gene sets: ", length(mature_genes), " mature-positive and ",
+  length(immature_genes), " monocyte-high genes; ",
+  length(conflicting_genes),
+  " direction-discordant genes were excluded before consensus ranking."
 )
 
 message("Loading the original scored monocyte/macrophage object...")
 data <- readRDS(input_rds)
+if (!"RNA" %in% Assays(data) || !"counts" %in% Layers(data[["RNA"]])) {
+  stop("The RNA assay must contain a counts layer for the AUCell workflow.")
+}
+
+mpi_columns <- c("Polarization_Index", "M1_Score", "M2_Score")
+if (!all(mpi_columns %in% colnames(data[[]]))) {
+  message("MPI columns are absent; calculating them from the frozen 145/165 signatures...")
+  mpi_file <- file.path(repo_root, "data", "gene_sets", "mpi_signatures.csv")
+  mpi_table <- read.csv(mpi_file, stringsAsFactors = FALSE)
+  mpi_sets <- split(mpi_table$gene, mpi_table$gene_set)
+  m1_genes <- intersect(mpi_sets[["MPI M1-like signature"]], rownames(data[["RNA"]]))
+  m2_genes <- intersect(mpi_sets[["MPI M2-like signature"]], rownames(data[["RNA"]]))
+  expression_matrix <- GetAssayData(data, assay = "RNA", layer = "counts")
+  mpi_rankings <- AUCell_buildRankings(
+    expression_matrix,
+    plotStats = FALSE,
+    splitByBlocks = TRUE,
+    BPPARAM = BiocParallel::SerialParam(progressbar = TRUE),
+    verbose = TRUE
+  )
+  mpi_auc <- AUCell_calcAUC(
+    list(M1 = m1_genes, M2 = m2_genes),
+    mpi_rankings,
+    normAUC = TRUE,
+    aucMaxRank = ceiling(0.05 * nrow(expression_matrix)),
+    nCores = 1,
+    verbose = TRUE
+  )
+  mpi_scores <- as.data.frame(t(getAUC(mpi_auc)), check.names = FALSE)
+  mpi_scores <- mpi_scores[colnames(data), , drop = FALSE]
+  data$M1_Score <- mpi_scores$M1
+  data$M2_Score <- mpi_scores$M2
+  data$Polarization_Index <- data$M1_Score - data$M2_Score
+  rm(expression_matrix, mpi_rankings, mpi_auc, mpi_scores)
+  invisible(gc())
+}
 required_meta <- c(
   "Celltype_raw1", "Sample_Type", "Patient_ID", "Source_GSE",
   "Polarization_Index", "M1_Score", "M2_Score"
@@ -116,42 +184,43 @@ missing_meta <- setdiff(required_meta, colnames(data[[]]))
 if (length(missing_meta)) {
   stop("Missing required metadata: ", paste(missing_meta, collapse = ", "))
 }
-if (!"RNA" %in% Assays(data) || !"counts" %in% Layers(data[["RNA"]])) {
-  stop("The RNA assay must contain a counts layer for the original AUCell workflow.")
-}
 
 rna_features <- rownames(data[["RNA"]])
 mature_genes <- intersect(mature_genes, rna_features)
 immature_genes <- intersect(immature_genes, rna_features)
-auc_max_rank <- ceiling(
-  cfg$auc_signatures$auc_max_rank_fraction * length(rna_features)
-)
+auc_max_rank <- ceiling(0.05 * length(rna_features))
 if (length(intersect(mature_genes, immature_genes))) {
   stop("Detected positive and negative gene sets overlap unexpectedly.")
 }
 
 score_columns <- c(mature_column, immature_column, mmi_column)
-if (all(score_columns %in% colnames(data[[]]))) {
-  message("Using AUCell scores stored in the pipeline object...")
-  score_meta <- data[[]] %>%
-    rownames_to_column("cell_barcode") %>%
-    select(cell_barcode, all_of(score_columns))
-  saveRDS(score_meta, score_rds)
-  write.csv(
-    score_meta,
-    gzfile(file.path(out_dir, "MMI_AUCell_noC1Q_cell_scores.csv.gz")),
-    row.names = FALSE
-  )
-} else if (file.exists(score_rds)) {
-  message("Using cached AUCell scores...")
+if (file.exists(score_rds)) {
+  message("Using the self-contained final Top200 AUCell score cache...")
   score_meta <- readRDS(score_rds)
-  score_index <- match(colnames(data), score_meta$cell_barcode)
-  if (anyNA(score_index) || !all(score_columns %in% colnames(score_meta))) {
-    stop("Cached AUCell scores do not match the current Seurat object.")
+} else if (file.exists(comparison_score_rds)) {
+  message("Importing the verified Top200 scores from the completed Top-N comparison...")
+  comparison_scores <- readRDS(comparison_score_rds)
+  required_comparison_scores <- c(
+    "cell_barcode", "Top200_Mature_AUCell",
+    "Top200_Immature_AUCell", "Top200_MMI"
+  )
+  missing_comparison_scores <- setdiff(
+    required_comparison_scores, colnames(comparison_scores)
+  )
+  if (length(missing_comparison_scores)) {
+    stop(
+      "Top-N score cache is missing columns: ",
+      paste(missing_comparison_scores, collapse = ", ")
+    )
   }
-  new_scores <- score_meta[score_index, score_columns, drop = FALSE]
-  rownames(new_scores) <- colnames(data)
-  data <- AddMetaData(data, new_scores)
+  score_meta <- comparison_scores %>%
+    transmute(
+      cell_barcode,
+      !!mature_column := Top200_Mature_AUCell,
+      !!immature_column := Top200_Immature_AUCell,
+      !!mmi_column := Top200_MMI
+    )
+  rm(comparison_scores)
 } else {
   message("Building per-cell gene rankings from RNA/counts...")
   expression_matrix <- GetAssayData(data, assay = "RNA", layer = "counts")
@@ -159,15 +228,13 @@ if (all(score_columns %in% colnames(data[[]]))) {
     expression_matrix,
     plotStats = FALSE,
     splitByBlocks = TRUE,
-    BPPARAM = BiocParallel::MulticoreParam(
-      workers = cfg$auc_signatures$ncores
-    ),
+    BPPARAM = BiocParallel::SerialParam(progressbar = TRUE),
     verbose = TRUE
   )
 
   gene_sets <- list(
-    External_Mature = mature_genes,
-    External_Monocyte_Immaturity = immature_genes
+    Top200_Mature = mature_genes,
+    Top200_Monocyte = immature_genes
   )
   message("Calculating AUCell AUC values with aucMaxRank = ", auc_max_rank, "...")
   cells_auc <- AUCell_calcAUC(
@@ -183,19 +250,32 @@ if (all(score_columns %in% colnames(data[[]]))) {
   colnames(auc_scores) <- c(mature_column, immature_column)
   auc_scores[[mmi_column]] <-
     auc_scores[[mature_column]] - auc_scores[[immature_column]]
-  data <- AddMetaData(data, auc_scores)
-
   score_meta <- auc_scores %>%
     rownames_to_column("cell_barcode")
-  saveRDS(score_meta, score_rds)
-  write.csv(
-    score_meta,
-    gzfile(file.path(out_dir, "MMI_AUCell_noC1Q_cell_scores.csv.gz")),
-    row.names = FALSE
-  )
   rm(expression_matrix, cells_rankings, cells_auc, auc_scores)
   invisible(gc())
 }
+
+score_index <- match(colnames(data), score_meta$cell_barcode)
+if (
+  anyNA(score_index) ||
+    !all(score_columns %in% colnames(score_meta)) ||
+    anyNA(score_meta[, score_columns, drop = FALSE])
+) {
+  stop("Top200 AUCell scores do not match the current Seurat object.")
+}
+new_scores <- as.data.frame(
+  score_meta[score_index, score_columns, drop = FALSE],
+  check.names = FALSE
+)
+rownames(new_scores) <- colnames(data)
+data <- AddMetaData(data, new_scores)
+saveRDS(score_meta, score_rds)
+write.csv(
+  score_meta,
+  gzfile(file.path(out_dir, "ConsensusTop200_MMI_AUCell_cell_scores.csv.gz")),
+  row.names = FALSE
+)
 
 data$Sample_Type <- factor(
   as.character(data$Sample_Type),
@@ -300,12 +380,12 @@ group_tests <- bind_rows(
   mutate(p_adjusted_BH = p.adjust(p_value, method = "BH"))
 write.csv(
   sample_scores,
-  file.path(out_dir, "MMI_AUCell_noC1Q_biological_sample_scores.csv"),
+  file.path(out_dir, "Top200_MMI_MPI_biological_sample_scores.csv"),
   row.names = FALSE
 )
 write.csv(
   group_tests,
-  file.path(out_dir, "MMI_AUCell_noC1Q_sample_level_tests.csv"),
+  file.path(out_dir, "Top200_MMI_MPI_sample_level_tests.csv"),
   row.names = FALSE
 )
 
@@ -471,26 +551,14 @@ p_mpi_violin <- VlnPlot(
 ) +
   theme_custom +
   geom_boxplot(width = 0.15, fill = "white", outlier.shape = NA, alpha = 0.7) +
-  geom_point(
-    data = sample_scores,
-    aes(x = Sample_Type, y = MPI_median),
-    inherit.aes = FALSE,
-    position = position_jitter(width = 0.08, height = 0),
-    shape = 21, size = 2.2, stroke = 0.45, fill = "white", color = "black"
-  ) +
   labs(x = "Macrophage", y = "MPI") +
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.35))) +
-  ggtitle("MPI by lesion region") +
+  stat_compare_means(
+    comparisons = sample_type_comparisons, method = "wilcox.test",
+    label = "p.signif", size = 5, bracket.size = 0.6
+  ) +
+  ylim(NA, max(data$Polarization_Index, na.rm = TRUE) * 1.5) +
+  ggtitle("MPI: After Downsampling") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))
-p_mpi_violin <- add_single_bracket(
-  p_mpi_violin,
-  data$Polarization_Index,
-  paste0(
-    group_tests$analysis_unit[group_tests$score == "MPI_median"],
-    " n=", group_tests$n_pairs[group_tests$score == "MPI_median"], ", ",
-    format_p(group_tests$p_adjusted_BH[group_tests$score == "MPI_median"])
-  )
-)
 
 p_mmi_violin <- VlnPlot(
   data,
@@ -501,26 +569,19 @@ p_mmi_violin <- VlnPlot(
 ) +
   theme_custom +
   geom_boxplot(width = 0.15, fill = "white", outlier.shape = NA, alpha = 0.7) +
-  geom_point(
-    data = sample_scores,
-    aes(x = Sample_Type, y = MMI_median),
-    inherit.aes = FALSE,
-    position = position_jitter(width = 0.08, height = 0),
-    shape = 21, size = 2.2, stroke = 0.45, fill = "white", color = "black"
-  ) +
   labs(x = "Macrophage", y = "MMI") +
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.35))) +
-  ggtitle("MMI by lesion region") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))
-p_mmi_violin <- add_single_bracket(
-  p_mmi_violin,
-  data[[mmi_column, drop = TRUE]],
-  paste0(
-    group_tests$analysis_unit[group_tests$score == "MMI_median"],
-    " n=", group_tests$n_pairs[group_tests$score == "MMI_median"], ", ",
-    format_p(group_tests$p_adjusted_BH[group_tests$score == "MMI_median"])
+  stat_compare_means(
+    comparisons = sample_type_comparisons, method = "wilcox.test",
+    label = "p.signif", size = 5, bracket.size = 0.6
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.30))) +
+  coord_cartesian(clip = "off") +
+  ggtitle("MMI: After Downsampling") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+    plot.margin = margin(t = 14, r = 8, b = 8, l = 8)
   )
-)
+
 save_plot("08_MPI_MMI_VlnPlot_original_code", p_mpi_violin | p_mmi_violin, 12, 6)
 
 target_subtypes <- c("Foam cells1", "Foam cells2", "LAM")
@@ -587,12 +648,12 @@ subtype_tests <- bind_rows(lapply(
   ungroup()
 write.csv(
   sample_subtype_scores,
-  file.path(out_dir, "MMI_AUCell_noC1Q_sample_subtype_scores.csv"),
+  file.path(out_dir, "Top200_MMI_MPI_sample_subtype_scores.csv"),
   row.names = FALSE
 )
 write.csv(
   subtype_tests,
-  file.path(out_dir, "MMI_AUCell_noC1Q_sample_subtype_tests.csv"),
+  file.path(out_dir, "Top200_MMI_MPI_sample_subtype_tests.csv"),
   row.names = FALSE
 )
 
@@ -605,24 +666,15 @@ p_mpi_3cell <- VlnPlot(
 ) +
   theme_custom +
   geom_boxplot(width = 0.15, fill = "white", outlier.shape = NA, alpha = 0.7) +
-  geom_point(
-    data = sample_subtype_scores,
-    aes(x = Celltype_raw1, y = MPI_median),
-    inherit.aes = FALSE,
-    position = position_jitter(width = 0.08, height = 0),
-    shape = 21, size = 1.8, stroke = 0.4, fill = "white", color = "black"
+  stat_compare_means(
+    comparisons = comparisons_3cell, method = "wilcox.test",
+    label = "p.signif", size = 5, bracket.size = 0.6
   ) +
   labs(x = NULL, y = "Macrophage Polarization Index (MPI)") +
   ggtitle(NULL) +
   NoLegend() +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.25))) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))
-p_mpi_3cell <- add_multiple_brackets(
-  p_mpi_3cell,
-  sub_data_3cell$Polarization_Index,
-  subtype_tests %>% filter(score == "MPI_median"),
-  target_subtypes
-)
 
 p_mmi_3cell <- VlnPlot(
   sub_data_3cell,
@@ -633,24 +685,15 @@ p_mmi_3cell <- VlnPlot(
 ) +
   theme_custom +
   geom_boxplot(width = 0.15, fill = "white", outlier.shape = NA, alpha = 0.7) +
-  geom_point(
-    data = sample_subtype_scores,
-    aes(x = Celltype_raw1, y = MMI_median),
-    inherit.aes = FALSE,
-    position = position_jitter(width = 0.08, height = 0),
-    shape = 21, size = 1.8, stroke = 0.4, fill = "white", color = "black"
+  stat_compare_means(
+    comparisons = comparisons_3cell, method = "wilcox.test",
+    label = "p.signif", size = 5, bracket.size = 0.6
   ) +
   labs(x = NULL, y = "Macrophage Maturation Index (MMI)") +
   ggtitle(NULL) +
   NoLegend() +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.25))) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))
-p_mmi_3cell <- add_multiple_brackets(
-  p_mmi_3cell,
-  sub_data_3cell[[mmi_column, drop = TRUE]],
-  subtype_tests %>% filter(score == "MMI_median"),
-  target_subtypes
-)
 save_plot("09_S2.6_MPI_MMI_3cell_VlnPlot", p_mpi_3cell | p_mmi_3cell, 12, 6)
 
 density_data <- data[[]] %>%
@@ -709,7 +752,7 @@ subtype_summary <- data[[]] %>%
   )
 write.csv(
   subtype_summary,
-  file.path(out_dir, "MMI_AUCell_noC1Q_subtype_summary.csv"),
+  file.path(out_dir, "Top200_MMI_MPI_subtype_summary.csv"),
   row.names = FALSE
 )
 
@@ -725,27 +768,48 @@ sample_summary <- data[[]] %>%
   )
 write.csv(
   sample_summary,
-  file.path(out_dir, "MMI_AUCell_noC1Q_sample_type_summary.csv"),
+  file.path(out_dir, "Top200_MMI_MPI_sample_type_summary.csv"),
   row.names = FALSE
 )
 
 parameter_manifest <- tibble(
   parameter = c(
     "input_assay", "input_layer", "aucMaxRank", "normAUC",
+    "external_sources", "final_top_n_per_direction",
+    "cross_source_consensus_ranking", "direction_conflict_handling",
     "mature_positive_genes", "immature_negative_genes",
-    "conflicting_genes_removed", "C1Q_source_module_included",
+    "mature_genes_in_both_individual_source_top200",
+    "immature_genes_in_both_individual_source_top200",
+    "direction_discordant_genes_excluded",
+    "selection_uses_carotid_study_data",
+    "MPI_definition",
     "group_test_unit", "multiple_testing"
   ),
   value = c(
     "RNA", "counts", as.character(auc_max_rank), "TRUE",
+    "GSE5099;GSE11864", as.character(top_n),
+    "mean_of_source_specific_directional_percentile_ranks",
+    "exclude_genes_with_opposite_effect_signs_between_sources",
     as.character(length(mature_genes)), as.character(length(immature_genes)),
-    as.character(length(conflicting_genes)), "FALSE",
+    as.character(sum(
+      membership$direction == "mature_positive" &
+        membership$selected_in_GSE5099_individual_top200 &
+        membership$selected_in_GSE11864_individual_top200
+    )),
+    as.character(sum(
+      membership$direction == "immature_negative" &
+        membership$selected_in_GSE5099_individual_top200 &
+        membership$selected_in_GSE11864_individual_top200
+    )),
+    as.character(length(conflicting_genes)),
+    "FALSE",
+    "AUCell(frozen 145-gene M1-like) minus AUCell(frozen 165-gene M2-like)",
     "biological sample or paired patient", "Benjamini-Hochberg"
   )
 )
 write.csv(
   parameter_manifest,
-  file.path(out_dir, "MMI_AUCell_noC1Q_parameter_manifest.csv"),
+  file.path(out_dir, "Top200_MMI_MPI_parameter_manifest.csv"),
   row.names = FALSE
 )
 writeLines(
@@ -755,18 +819,32 @@ writeLines(
 
 writeLines(
   c(
-    "MMI definition: External_Mature_AUCell - External_Monocyte_Immaturity_AUCell.",
-    "External sources: GSE5099, GSE11864, and HPCA-derived fixed markers.",
-    "The separately curated C1Q tissue-macrophage source module was excluded before union construction.",
-    paste0("Mature-positive genes after cleaning: ", length(mature_genes), "."),
-    paste0("Immature-negative genes after cleaning: ", length(immature_genes), "."),
-    paste0("Removed from both directions: ", paste(conflicting_genes, collapse = ", "), "."),
+    "FINAL ANALYSIS: GSE5099 + GSE11864 Top200 MPI/MMI.",
+    "MMI definition: Top200_Mature_AUCell - Top200_Monocyte_AUCell.",
+    "External sources: GSE5099 and GSE11864 only.",
+    paste0(
+      "The final gene sets contain exactly ", top_n,
+      " mature-positive and ", top_n, " monocyte-high genes."
+    ),
+    paste0(
+      "Only genes measured in both external sources and showing the same differential direction ",
+      "were eligible; ", length(conflicting_genes),
+      " genes with opposite effect signs were excluded."
+    ),
+    paste0(
+      "Eligible genes were ranked in each source and direction, converted to percentile ranks, ",
+      "and ordered by the mean of the two source-specific percentiles."
+    ),
+    "No carotid expression, carotid subtype label, or carotid MMI result was used for gene selection.",
+    paste0("Final mature-positive genes: ", length(mature_genes), "."),
+    paste0("Final monocyte-high genes: ", length(immature_genes), "."),
+    "The full direction-discordant audit list is provided as a separate CSV file.",
     "AUCell workflow follows the main code: RNA/counts rankings, normalized AUC, top 5% aucMaxRank.",
-    "MPI is the existing Polarization_Index and was not recalculated or modified.",
+    "MPI is Polarization_Index = M1_Score - M2_Score using the frozen 145/165 literature-derived signatures.",
     "Plot geometry follows GSE159677_Carotid_MainProject/single_cell.R.",
-    "Violin geometry shows cells; overlaid white points and inferential tests use biological-sample medians.",
-    "Paired patient-level Wilcoxon tests are used when at least three complete pairs are available.",
-    "Benjamini-Hochberg adjustment is applied within each displayed family of tests.",
+    "Violin annotations retain the legacy cell-level stat_compare_means code.",
+    "Biological-sample and paired-patient tests are exported separately as CSV files.",
+    "Benjamini-Hochberg adjustment is applied within each exported sample-level test family.",
     paste0("MMI FeaturePlot limits: quantiles ", paste(mmi_color_quantiles, collapse = "-"), "."),
     paste0("Density display trim by subtype: quantiles ", paste(density_trim_quantiles, collapse = "-"), "."),
     paste0("Density contour normalized-density breaks: ", paste(density_contour_breaks, collapse = ", "), ".")

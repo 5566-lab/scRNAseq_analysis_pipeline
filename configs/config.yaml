@@ -1,6 +1,7 @@
 project:
-  name: GSE159677_Carotid_MainProject
+  name: APOBEC3A_atherosclerosis_multiomics
   species: Homo sapiens
+  workspace_root: /public3/DSC/single_cell
   output_root: results
   seed: 123
 
@@ -13,29 +14,24 @@ inputs:
   gse213740_dir: /public3/DSC/single_cell/GSE213740_AscAorta_Control_PA
   gse216860_dir: /public3/DSC/single_cell/GSE216860_Carotid_PA
   gse159677_dir: /public3/DSC/single_cell/GSE159677_Carotid_MainProject
-  existing_integrated_rds: /public3/DSC/single_cell/Result/figer_new/group_result.rds
+  existing_integrated_rds: /public3/DSC/single_cell/Result/sub_integrated_data_Final.rds
 
 directory_10x_datasets:
   - dataset: GSE213740
     path: /public3/DSC/single_cell/GSE213740_AscAorta_Control_PA
     ac_pa: Control AscAorta
-    notes: "Three samples overlap with GSE216860 in the exploratory script; keep configurable for reproducibility."
   - dataset: GSE234077
     path: /public3/DSC/single_cell/GSE234077_Carotid_AC
     ac_pa: Carotid Atherosclerotic Core
-    notes: "Directory-based carotid AC 10X dataset from the source script."
   - dataset: GSE224273
     path: /public3/DSC/single_cell/GSE224273_Carotid_AC
     ac_pa: Carotid Atherosclerotic Core
-    notes: "Directory-based carotid AC 10X dataset from the source script."
   - dataset: GSE253903
     path: /public3/DSC/single_cell/GSE253903_Carotid_AC
     ac_pa: Carotid Atherosclerotic Core
-    notes: "Directory-based carotid AC 10X dataset from the source script."
   - dataset: GSE216860
     path: /public3/DSC/single_cell/GSE216860_Carotid_PA
     ac_pa: Control AscAorta
-    notes: "Classified as Control AscAorta following the source script comments."
 
 outputs:
   prepared_objects_rds: results/interim/prepared_seurat_objects.rds
@@ -43,9 +39,6 @@ outputs:
   annotated_rds: results/interim/group_result_annotated.rds
   mo_ma_rds: results/interim/mo_ma_result.rds
   hdwgcnna_rds: results/hdWGCNA/Mo_Ma/data.rds
-  macspectrum_rds: results/hdWGCNA/Mo_Ma/data_macspectrum_scored.rds
-  auc_scored_rds: results/hdWGCNA/Mo_Ma/data_scored.rds
-  pseudotime_rds: results/monocle3/data_pseudotime.rds
 
 qc:
   min_cells: 3
@@ -60,6 +53,8 @@ integration:
   batch_column: orig.ident
 
 cell_types:
+  cell_type_column: Celltype_raw1
+  disease_column: AC_PA
   monocyte_macrophage_labels:
     - Monocyte
     - Macrophage
@@ -67,8 +62,6 @@ cell_types:
     - FOAM_cells2
     - Foam cells1
     - Foam cells2
-  cell_type_column: Celltype_raw1
-  disease_column: AC_PA
 
 hdwgcnna:
   wgcna_name: wgcna
@@ -77,52 +70,67 @@ hdwgcnna:
   soft_power: 4
   min_module_size: 50
 
-monocle3:
-  num_dim: 20
-  umap_neighbors: 30
-  umap_min_dist: 0.3
-  cluster_resolution: 0.00001
-  minimal_branch_len: 2
-  selected_modules:
-    - magenta
-    - yellow
-    - black
-    - turquoise
-    - brown
-    - purple
+scrna:
+  integrated_rds: /public3/DSC/single_cell/Result/figer_new/group_result.rds
+  annotated_rds: /public3/DSC/single_cell/Result/sub_integrated_data_Final.rds
+  scored_rds: /public3/DSC/single_cell/Result/figer_new/hdWGCNA/Mo_Ma/data_scored.rds
+  pseudotime_rds: /public3/DSC/single_cell/Result/figer_new/monocle3/data_pseudotime.rds
+  monocle_cds_rds: /public3/DSC/single_cell/Result/figer_new/monocle3/cds_MM_foam.rds
+  geo_cache: /public3/DSC/single_cell/GEOquery_cache
+  output_dir: results/scrna
 
-macspectrum:
-  assay: RNA
-  slot: data
-  species: hum
-
-auc_signatures:
-  external_mmi_gene_sets: data/gene_sets/external_consensus_mmi_no_c1q.csv
-  external_mmi_source_gene_sets: data/gene_sets/external_consensus_mmi_no_c1q_sources.csv
-  publication_output_dir: results/figures/mmi_auc_external_consensus_no_c1q
-  auc_max_rank_fraction: 0.05
-  ncores: 16
-  font_family: Arial
-  fonts:
-    regular: /dsk2/user/dengsc/ARIAL.TTF
-    bold: /dsk2/user/dengsc/ARIALBD.TTF
-    italic: /dsk2/user/dengsc/ARIALI.TTF
-    bolditalic: /dsk2/user/dengsc/ARIALBI.TTF
-
-pathway:
-  output_dir: results/GSEA_GSVA
+scrna_pathway:
+  output_dir: results/scrna/pathway
   msig_category: C2
   gsea_pvalue_cutoff: 0.05
   gsva_logfc_cutoff: 0.5
   gsva_fdr_cutoff: 0.01
-  metabolism_method: VISION
-  metabolism_type: KEGG
-  ncores: 4
 
-apobec3a_ko:
-  clone13:
-    count_table: /dsk2/data/C-to-U/APOBEC3A/00.mergeRawFq/count.txt
-    deg_table: /dsk2/data/C-to-U/APOBEC3A/00.mergeRawFq/ko/3A_total.csv
-  clone37:
-    count_table: /dsk2/who/panxy/RNAediting/CAD/count.txt
-    deg_table: /public3/DSC/single_cell/DEG_ALL.csv
+scoring:
+  top_n_per_direction: 200
+  membership_csv: data/gene_sets/MMI_GSE5099_GSE11864_Top200_membership.csv
+  mpi_gene_sets_csv: data/gene_sets/mpi_signatures.csv
+  mmi_gene_sets_csv: data/gene_sets/mmi_top200_signatures.csv
+  apobec3a_gene_set_csv: data/gene_sets/apobec3a_positive_myeloid_signature.csv
+  output_dir: results/scoring
+
+spatial:
+  module_root: workflow/04_spatial
+  spatial_root: /public3/DSC/single_cell/spatial
+  xenium_rds: /public3/DSC/single_cell/spatial/GSE315246_xenium.obj.integrated.rds
+  visium_rds: /public3/DSC/single_cell/spatial/GSE314851_Visium_FFPE_integrated.rds
+  geomx_archive: /public3/DSC/single_cell/spatial/GSE277170_RAW.tar
+
+bulk_rnaseq:
+  count_table: /public7/DSC_Public7/DSC/DSC/20251004_NGS/expression_analysis/gene_counts_all.txt
+  sample_manifest: metadata/rna_editing_sample_manifest.tsv
+  output_dir: results/bulk_rnaseq
+  min_count: 10
+  min_samples: 3
+  padj_cutoff: 0.05
+  abs_log2fc_cutoff: 1.0
+  contrasts:
+    - clone13
+    - clone37
+    - combined
+
+rna_editing:
+  alignment_dir: /public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned
+  jacusa_jar: /dell_1/dsc/RNA_seq/data/jacusa/JACUSA2-2.0.4/JACUSA_v2.0.4.jar
+  reference_fasta: /dell_1/dsc/RNA_seq/data/index/GRCh38.dna.Ensembl_release_104.fa
+  annotation_gtf: /dell_1/dsc/RNA_seq/data/index/Homo_sapiens.GRCh38.104.gtf
+  annotation_gff3: /public7/DSC_Public7/DSC/DSC/20251004_NGS/RawData/Homo_sapiens.GRCh38.104.gff3
+  kegg_rds: /public7/DSC_Public7/DSC/DSC/20251004_NGS/result/M013_result_Score1_Hybrid/kegg_hsa_offline.rds
+  output_dir: results/rna_editing
+  threads: 8
+  min_coverage: 10
+  score_cutoff: 1.0
+  pvalue_cutoff: 0.10
+  delta_editing_cutoff: 0.05
+  wt_min_covered_replicates: 4
+  ko_min_covered_replicates: 3
+
+supplementary_tables:
+  source_workspace: /public3/DSC/single_cell
+  public7_ngs_result_root: /public7/DSC_Public7/DSC/DSC/20251004_NGS/result
+  output_dir: results/supplementary_tables

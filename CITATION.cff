@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this analysis pipeline, please cite the associated manuscript and the public datasets listed in metadata/sample_manifest.csv."
+title: "APOBEC3A in Human Atherosclerosis: Multi-omics Analysis Pipeline"
+type: software
+authors:
+  - name: "5566 Lab"
+repository-code: "https://github.com/5566-lab/scRNAseq_analysis_pipeline"
+license: MIT
+version: 1.0.0
+date-released: 2026-08-11

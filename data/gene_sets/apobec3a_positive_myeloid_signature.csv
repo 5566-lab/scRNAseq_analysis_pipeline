@@ -1,0 +1,64 @@
+gene_set,source,gene
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature and current carotid scRNA-seq within-cell-type APOBEC3A-positive top-25 markers,ISG15
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,IFIT1
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,IFIT2
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,IFIT3
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,IFI6
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,IFI27
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature and current carotid scRNA-seq within-cell-type APOBEC3A-positive top-25 markers,MX1
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,OAS1
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,OAS2
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,STAT1
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,RSAD2
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,MARCO
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,LPL
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,C7
+APOBEC3A-positive / ISG-like myeloid signature,Predefined ISG-like seed signature used in this study,TNF
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,FCN1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,LILRA5
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,CD300E
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,LILRB2
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,PLA2G7
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,IGSF6
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,NFKBIE
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,DNAAF1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,AQP9
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,SH2D3C
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,VCAN
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,SELL
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,MPEG1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,TREM1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,HAVCR2
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,IL6R
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,IL1B
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,CD40
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,NLRP3
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,LGALS3
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,HES4
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,CD86
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,MYH11
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,TMEM52B
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,SLAMF7
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,COL3A1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,MYLK
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,APOLD1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,AEBP1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,ACTA2
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,THAP2
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,THBS1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,LILRB4
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,ACVR2A
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,SMYD2
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,PECAM1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,RETN
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,PPARG
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,TAGLN
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,CRISPLD2
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,SERPINB9
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,SLC3A2
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,PTPRC
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,FBN1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,COL1A1
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,SPIB
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,CD274
+APOBEC3A-positive / ISG-like myeloid signature,Current carotid scRNA-seq reference; within-cell-type APOBEC3A-positive vs APOBEC3A-negative top-25 markers,MCEMP1

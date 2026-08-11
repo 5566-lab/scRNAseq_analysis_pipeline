@@ -1,0 +1,13 @@
+name: apobec3a-atherosclerosis
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.10
+  - pandas>=2.0
+  - scipy>=1.10
+  - openpyxl>=3.1
+  - r-base>=4.2
+  - subread>=2.0
+  - openjdk>=17
+  - samtools>=1.17

@@ -1,54 +1,79 @@
-# scRNA-seq Analysis Pipeline
+# APOBEC3A in Human Atherosclerosis: Multi-omics Analysis Pipeline
 
-Configuration-driven R pipeline for public scRNA-seq analysis, including Seurat integration, monocyte/macrophage hdWGCNA, custom AUCell M1/M2 macrophage signature scoring, Monocle3 pseudotime analysis, and GSEA/GSVA pathway comparison with APOBEC3A-KO RNA-seq results.
+Publication code for the study **Single-Cell and Spatial Transcriptomics Identify APOBEC3A as a Myeloid Regulator in Human Atherosclerosis**. The repository links public single-cell RNA-seq, macrophage-state scoring, Monocle3 trajectories, Xenium/Visium/GeoMx spatial analyses, APOBEC3A-knockout bulk RNA-seq, RNA editing, and supplementary-table generation in one ordered workflow.
 
-## Pipeline
+## Analysis graph
 
-1. `scripts/01_prepare_seurat_objects.R` builds per-study Seurat objects from public count matrices.
-2. `scripts/02_integrate_cluster.R` performs QC, integration, clustering, marker detection, and annotation-ready outputs.
-3. `scripts/03_hdWGCNA_mo_ma.R` runs hdWGCNA on monocyte/macrophage subsets.
-4. `scripts/04b_auc_macrophage_signatures.R` computes the original AUCell MPI and the external-consensus AUCell MMI.
-5. `scripts/04c_publication_mpi_mmi_plots.R` regenerates the original-style MPI/MMI figures and performs biological-sample-level statistical tests.
-6. `scripts/05_monocle_pseudotime.R` performs Monocle3 trajectory and branch analysis.
-7. `scripts/06_gsea_gsva.R` performs GSEA, GSVA, and APOBEC3A-KO pathway comparisons.
+```text
+Public scRNA-seq matrices
+  -> QC / integration / annotation
+  -> monocyte-macrophage hdWGCNA
+  -> MPI and external MMI scoring
+  -> Monocle3 pseudotime and divergent fates
+  -> spatial projection and core-like-region statistics
 
-The external-consensus MMI uses frozen GSE5099, GSE11864, and HPCA-derived gene sets. The separately curated C1Q module is excluded, and six genes with inconsistent directions across external sources are removed from both sides before scoring. Individual C1Q-family genes remain eligible when independently selected by HPCA or either GEO signature. The final score is `AUCell(mature-positive) - AUCell(monocyte/immature-negative)`, with 476 genes in each direction. No marker is selected from the carotid study data.
+APOBEC3A-KO BAM files
+  -> featureCounts -> clone13 / clone37 / combined DESeq2
+  -> JACUSA2 call-2 -> editing-ratio limma
+  -> editing-expression and cross-clone consistency
 
-The publication plotting step regenerates the original MPI/MMI UMAP, bar, violin, and LAM/Foam-cell density layouts. Inferential tests use biological-sample medians or paired patients rather than treating individual cells as independent replicates. See `docs/external_consensus_mmi_method.md` for the full method and reporting notes.
-
-Optional auxiliary scoring:
-
-```bash
-Rscript scripts/04_macSpectrum_scores.R --config configs/config.yaml
+All machine-readable outputs
+  -> Supplementary Tables S2-S10
 ```
 
-`04_macSpectrum_scores.R` uses the `macSpectrum` package model and is not part of the default pipeline. The default polarization index retains the original M1-minus-M2 AUCell definition; the default maturation index is the fixed external-consensus AUCell difference described above.
+## Repository layout
 
-Run the full pipeline:
+| Path | Purpose |
+|---|---|
+| `configs/config.yaml` | All machine-specific inputs and analysis thresholds |
+| `metadata/` | Public-dataset manifest, frozen annotation map, and 6 WT + 6 KO manifest |
+| `data/gene_sets/` | Frozen MPI, Top200 MMI, and APOBEC3A-positive signatures |
+| `workflow/01_scrna/` | scRNA-seq preparation, integration, hdWGCNA, and exact publication source |
+| `workflow/02_scoring/` | External GEO ranking, deterministic Top200 selection, AUCell MPI/MMI figures |
+| `workflow/03_trajectory/` | Frozen Monocle3 publication figures |
+| `workflow/04_spatial/` | Xenium, Visium, GeoMx, and core-like-region analyses |
+| `workflow/05_bulk_rnaseq/` | Unified clone13, clone37, and combined DESeq2/GSEA/GSVA analysis |
+| `workflow/06_rna_editing/` | JACUSA2 calling, editing statistics, and contrast consistency |
+| `workflow/07_supplementary_tables/` | Supplementary Tables S2-S10 |
+| `scripts/run_pipeline.R` | Ordered stage runner |
+| `scripts/validate_repo.R` | Static and scientific-invariant validation |
+
+## Frozen publication decisions
+
+- **MMI** uses only GSE5099 and GSE11864. Genes must occur in both re-analysed datasets and have concordant macrophage-versus-monocyte direction. The final sets contain exactly 200 macrophage-maturation-positive and 200 monocyte-high genes, selected deterministically by the mean source-specific directional percentile rank. HPCA and C1Q are not used.
+- **MPI** is `AUCell(M1-like) - AUCell(M2-like)` and uses the frozen 145-gene M1-like and 165-gene M2-like literature-derived signatures in `data/gene_sets/mpi_signatures.csv`.
+- **Pseudotime fates** are read from the publication checkpoint `data_pseudotime.rds`. A later `cds_MM_foam.rds` contains a different Fate 2 selection and is not used for final branch figures.
+- **Bulk RNA-seq** uses raw integer featureCounts values. Clone-specific models use `~ condition`; the combined 12-sample model uses `~ clone + condition`. Batch-corrected expression is not used as DESeq2 input.
+- **RNA editing** fixes `cond1 = WT`, `cond2 = KO`, and `delta = KO - WT` for clone13, clone37, and combined analyses. Existing nominal-threshold labels are retained for result reproduction, and BH-FDR is also exported.
+- THP-1 samples are excluded from the primary APOBEC3A-knockout analyses.
+
+## Run
+
+Edit `configs/config.yaml`, then validate without launching expensive analyses:
 
 ```bash
-Rscript scripts/run_pipeline.R --config configs/config.yaml
+Rscript scripts/validate_repo.R --config configs/config.yaml
+Rscript scripts/run_pipeline.R --config configs/config.yaml --stage all --dry-run
 ```
 
-Run one step:
+Run selected stages:
 
 ```bash
-Rscript scripts/03_hdWGCNA_mo_ma.R --config configs/config.yaml
+Rscript scripts/run_pipeline.R --config configs/config.yaml \
+  --stage scoring,trajectory
+
+Rscript scripts/run_pipeline.R --config configs/config.yaml \
+  --stage bulk,rna-editing
 ```
 
-## Configuration
+Available stages are `scrna`, `scoring`, `trajectory`, `pathway`, `spatial`, `bulk`, `rna-editing`, and `supplementary`. Outputs are written below `results/` and are ignored by Git.
 
-Edit `configs/config.yaml` for input paths, output directories, filtering thresholds, analysis parameters, and APOBEC3A-KO count/DEG files. No script requires project-specific absolute paths outside the config file.
+## Reproducibility notes
 
-The current dataset loader covers `GSE260657`, `GSE247238`, `GSE131778`, `GSE210152`, `GSE155468`, `GSE159677`, `GSE213740`, `GSE234077`, `GSE224273`, `GSE253903`, and `GSE216860`.
+The final annotated Seurat object, Monocle3 CDS, spatial Seurat objects, BAM files, reference genome, and raw public matrices are too large for Git. Their paths are declared in `configs/config.yaml`; accession-level provenance is retained in `metadata/`. `workflow/01_scrna/single_cell_publication.R` is the exact current publication source and is retained for audit, but it contains the original interactive branch-selection block. Automated final figures instead use the frozen non-interactive scripts in `workflow/03_trajectory/`.
 
-See `docs/final_coverage_audit.md` for the final coverage check against the exploratory scripts, including modules that remain archived but are not automated in the default pipeline.
+Software requirements are listed in `DESCRIPTION`, `environment.yml`, and `requirements.txt`. JACUSA2 v2.0.4, Java, featureCounts, and a GRCh38 reference/annotation are external command-line requirements.
 
-## Source Code Policy
+## License
 
-Original exploratory scripts are summarized in `docs/code_function_archive.md`. When multiple scripts had overlapping functions, the latest or most focused version was retained as the implementation source:
-
-- `single_cell.R` is treated as the latest whole-workflow reference.
-- `hdWGCNA/Mo_Ma/MM_WGCNA.R` supersedes the older generic `hdWGCNA/hdWGCNA.R` for Mo/Ma module analysis.
-- `monocle3/monocle_MM/MM_monocle.R` supersedes duplicated Monocle3 blocks in `single_cell.R`.
-- `untitled9.R` is treated as a supplemental plotting scratch script, not a pipeline step.
+MIT. Public datasets remain subject to their original repository terms and citation requirements.

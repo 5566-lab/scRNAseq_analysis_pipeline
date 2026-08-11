@@ -1,34 +1,48 @@
-Package: GSE159677CarotidPipeline
-Title: Carotid Atherosclerosis Single-Cell Analysis Pipeline
-Version: 0.1.0
-Description: Configuration-driven R scripts for Seurat integration, hdWGCNA, custom AUCell macrophage signature scoring, Monocle3, GSEA, and GSVA analyses.
+Package: APOBEC3AAtherosclerosisPipeline
+Title: APOBEC3A Atherosclerosis Multi-omics Publication Pipeline
+Version: 1.0.0
+Description: Reproducible single-cell, trajectory, spatial, bulk RNA-seq,
+    RNA-editing, and supplementary-table analyses for human atherosclerosis.
 Encoding: UTF-8
 License: MIT
 Depends: R (>= 4.2.0)
 Imports:
+    AnnotationDbi,
+    AUCell,
+    Biobase,
+    BiocParallel,
+    clusterProfiler,
+    data.table,
+    DESeq2,
+    dplyr,
+    GEOquery,
+    GenomeInfoDb,
+    GenomicRanges,
+    ggplot2,
+    ggrepel,
+    ggpubr,
+    ggridges,
+    GSVA,
+    harmony,
+    hdWGCNA,
+    hgu133plus2.db,
+    JACUSA2helper,
+    limma,
+    monocle3,
+    msigdbr,
+    openxlsx,
+    optparse,
+    org.Hs.eg.db,
+    patchwork,
+    pheatmap,
+    plyranges,
+    purrr,
+    rtracklayer,
+    scales,
     Seurat,
     SeuratObject,
-    dplyr,
-    tidyr,
+    stringr,
     tibble,
-    ggplot2,
-    patchwork,
-    yaml,
-    optparse,
-    GEOquery,
-    harmony,
+    tidyr,
     WGCNA,
-    hdWGCNA,
-    monocle3,
-    macSpectrum,
-    clusterProfiler,
-    org.Hs.eg.db,
-    msigdbr,
-    GSVA,
-    limma,
-    ggrepel,
-    AUCell,
-    BiocParallel,
-    ggpubr,
-    scales,
-    showtext
+    yaml
