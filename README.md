@@ -59,9 +59,11 @@ Rscript scripts/run_pipeline.R --config configs/config.yaml \
 
 Available stages are `scrna`, `scoring`, `trajectory`, `pathway`, `spatial`, `bulk`, `rna-editing`, and `supplementary`. Outputs are written below `results/` and are ignored by Git.
 
-## Reproducibility notes
+## Data sources
 
-The final annotated Seurat object, Monocle3 CDS, spatial Seurat objects, BAM files, reference genome, and raw public matrices are too large for Git. Their paths are declared in `configs/config.yaml`; accession-level provenance is retained in `metadata/`. `workflow/01_scrna/single_cell_publication.R` is the exact current publication source and is retained for audit, but it contains the original interactive branch-selection block. Automated final figures instead use the frozen non-interactive scripts in `workflow/03_trajectory/`.
+The analysis integrates nine public scRNA-seq studies, three spatial-transcriptomics studies, two external monocyte-to-macrophage differentiation datasets, and study-generated APOBEC3A-knockout bulk RNA-seq/RNA-editing data. GEO accessions, dataset roles, exclusions, replicate structure, and local configuration instructions are provided in `docs/reproducibility.md`; sample-level mappings are provided in `metadata/`.
+
+`workflow/01_scrna/single_cell_publication.R` retains the complete publication analysis source for audit. Automated final trajectory figures use the non-interactive scripts in `workflow/03_trajectory/`.
 
 Software requirements are listed in `DESCRIPTION`, `environment.yml`, and `requirements.txt`. JACUSA2 v2.0.4, Java, featureCounts, and a GRCh38 reference/annotation are external command-line requirements.
 
