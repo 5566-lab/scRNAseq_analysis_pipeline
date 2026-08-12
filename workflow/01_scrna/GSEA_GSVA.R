@@ -5,7 +5,7 @@ subset_cells@meta.data$cdsMM_sub1 <- ifelse(
   "Foam_Cell",
   "Macrophage"
 )
-Idents(subset_cells) <- "cdsMM_sub1" 
+Idents(subset_cells) <- "cdsMM_sub1"
 
 
 
@@ -17,7 +17,7 @@ subset_cells <- sc.metabolism.Seurat(
   method = "VISION",       # 可选 AUCell/ssGSEA/GSVA
   imputation = F,          # 关闭数据插补（加快速度）
   ncores = 4,              # 并行计算核数
-  metabolism.type = "KEGG" # 使用 KEGG 
+  metabolism.type = "KEGG" # 使用 KEGG
 )
 
 # 提取代谢评分矩阵
@@ -45,14 +45,14 @@ avg_df_top20 <- avg_df_top20[custom_row_order, , drop=FALSE]
 pdf("/public3/DSC/single_cell/GSE159677/GSEA/metabolism_heatmap.pdf", width=12, height=8)
 pheatmap(t(avg_df_top20),
          show_colnames = T,
-         scale = 'row', 
+         scale = 'row',
          cluster_rows = T,
          color = colorRampPalette(c('#1A5592','white',"#B83D3D"))(100),
          cluster_cols = F,
          main = "",#Top 20 Differential Metabolic Pathways by Cell Type
-         fontsize_row = 12, 
-         fontsize_col = 14, 
-         fontsize = 12,  
+         fontsize_row = 12,
+         fontsize_col = 14,
+         fontsize = 12,
          angle_col = 45) +
         theme(
           text = element_text(family = "Arial"))
@@ -70,10 +70,10 @@ for (cell_type in rownames(avg_df)) {
   # 获取当前细胞类型的通路活性值（转换为数值向量）
   cell_data <- as.numeric(avg_df[cell_type, ])
   names(cell_data) <- colnames(avg_df)  # 保持通路名称
-  
+
   # 按活性值降序排列并选择前5（处理可能的NA值）
   sorted_pathways <- names(sort(cell_data, decreasing = TRUE, na.last = TRUE))[1:top_n]
-  
+
   # 存储结果
   all_top_pathways[[cell_type]] <- sorted_pathways
 }
@@ -89,14 +89,14 @@ avg_df_selected <- avg_df_selected[custom_row_order, , drop = FALSE]
 pdf("/public3/DSC/single_cell/GSE159677/GSEA/Selected_Metabolic_heatmap.pdf", width=15, height=15)
 pheatmap(t(avg_df),
          show_colnames = T,
-         scale = 'row', 
+         scale = 'row',
          cluster_rows = T,
          color = colorRampPalette(c('#1A5592','white',"#B83D3D"))(100),
          cluster_cols = T,
          main = "",#"Selected Metabolic Pathways Activity by Cell Type"
-         fontsize_row = 12, 
-         fontsize_col = 14, 
-         fontsize = 12,  
+         fontsize_row = 12,
+         fontsize_col = 14,
+         fontsize = 12,
          angle_col = 45) +
   theme(
     text = element_text(family = "Arial"))
@@ -110,7 +110,7 @@ dev.off()
 
 markers <- FindMarkers(
   object = subset_cells,
-  ident.1 = "Foam_Cell", 
+  ident.1 = "Foam_Cell",
   ident.2 = "Macrophage",
   group.by = "cdsMM_sub1",
   logfc.threshold = 0.5,     # 过滤低变化基因
@@ -127,18 +127,18 @@ output_dir <- "/public3/DSC/single_cell/GSE159677/GSEA"
 # 转换基因ID为ENTREZID
 genelist <- markers$avg_log2FC
 names(genelist) <- rownames(markers)
-genelist <- sort(genelist, decreasing = TRUE) 
+genelist <- sort(genelist, decreasing = TRUE)
 
-gene_map <- bitr(names(genelist), 
-                 fromType = "SYMBOL", 
-                 toType = "ENTREZID", 
+gene_map <- bitr(names(genelist),
+                 fromType = "SYMBOL",
+                 toType = "ENTREZID",
                  OrgDb = "org.Hs.eg.db")
 genelist <- genelist[gene_map$SYMBOL]
 names(genelist) <- gene_map$ENTREZID
 
-geneset <- msigdbr(species = "Homo sapiens", 
+geneset <- msigdbr(species = "Homo sapiens",
                         category = "C2",
-                        ) %>%  
+                        ) %>%
   dplyr::select(gs_name, entrez_gene)
 
 gsea_res <- GSEA(genelist,
@@ -146,12 +146,12 @@ gsea_res <- GSEA(genelist,
                  pvalueCutoff = 0.05,
                  pAdjustMethod = "BH",
                  eps = 0,
-                 seed = 123 ) 
-write.csv(as.data.frame(gsea_res), 
+                 seed = 123 )
+write.csv(as.data.frame(gsea_res),
           file = file.path(output_dir, "gsea_results.csv"),
           row.names = FALSE)
 library(enrichplot)
-gseaplot2(gsea_res, 
+gseaplot2(gsea_res,
           geneSetID = 1:10,  # 选择前10条通路
           base_size = 12,
           title = "Top Enriched Pathways in Foam Cells")
@@ -198,7 +198,7 @@ gseaplot2(gsea_res,
 target_pathways <- c("COATES_MACROPHAGE_M1_VS_M2_UP", "WP_PPAR_SIGNALING")
 
 pdf(file = file.path(output_dir, "gsea_plot.pdf"), width = 10, height = 8)
-gseaplot2(gsea_res, 
+gseaplot2(gsea_res,
           geneSetID = target_pathways,  # 指定目标通路
           base_size = 12,
           title = "GSEA of Macrophage Polarization and PPAR Signaling")
@@ -239,9 +239,9 @@ expr_matrix <- as.matrix(subset_cells@assays$RNA$data)
 # 2.2 转换基因ID为ENTREZID（与GSEA保持一致）
 
 expr_df <- data.frame(SYMBOL = rownames(expr_matrix), expr_matrix)
-expr_df <- inner_join(expr_df, gene_map, by = "SYMBOL") %>% 
+expr_df <- inner_join(expr_df, gene_map, by = "SYMBOL") %>%
   dplyr::select(-SYMBOL) %>%
-  aggregate(. ~ ENTREZID, data = ., FUN = mean)  
+  aggregate(. ~ ENTREZID, data = ., FUN = mean)
 
 rownames(expr_df) <- expr_df$ENTREZID
 expr_matrix <- as.matrix(expr_df[, -1])
@@ -251,10 +251,10 @@ kegg_list <- split(kegg_df$entrez_gene, kegg_df$gs_name)
 
 # 创建参数对象（新版GSVA语法）
 params <- gsvaParam(
-  exprData = expr_matrix, 
+  exprData = expr_matrix,
                     geneSets = kegg_list,
-                    kcdf = "Poisson", 
-                    absRanking = FALSE) 
+                    kcdf = "Poisson",
+                    absRanking = FALSE)
 #执行GSVA计算
 gsva_scores <- gsva(params, verbose = TRUE)
 
@@ -263,9 +263,9 @@ gsva_scores <- gsva(params, verbose = TRUE)
 design <- model.matrix(~ subset_cells$cdsMM_sub1)
 fit <- lmFit(gsva_scores, design)
 fit <- eBayes(fit)
-diff_pathways <- topTable(fit, 
-                          coef = 2, 
-                          number = Inf, 
+diff_pathways <- topTable(fit,
+                          coef = 2,
+                          number = Inf,
                           adjust.method = "BH")
 
 sig_pathways <- diff_pathways %>%
@@ -284,7 +284,7 @@ diff_pathways <- read.csv(file.path(output_dir, "GSVA_diff_pathways_all.csv"))
 #WikiPathways通路：脂肪酸转运蛋白 泡沫细胞下调
 #WP_CCL18_SIGNALING
 #WikiPathways通路：CCL18信号 上调
-#SA_FAS_SIGNALING 
+#SA_FAS_SIGNALING
 #SA研究：FAS信号 下调
 #REACTOME_SCAVENGING_BY_CLASS_B_RECEPTORS
 #Reactome通路：B类受体的清除作用 上调
@@ -299,10 +299,10 @@ diff_pathways <- read.csv(file.path(output_dir, "GSVA_diff_pathways_all.csv"))
 #RAMJAUN_APOPTOSIS_BY_TGFB1_VIA_MAPK1_UP
 #Ramjaun研究：TGFB1通过MAPK1诱导凋亡（上调） 下调
 
-volcano_plot <- ggplot(diff_pathways, 
+volcano_plot <- ggplot(diff_pathways,
                        aes(x = logFC, y = -log10(adj.P.Val))) +
-  geom_point(aes(color = ifelse(adj.P.Val < 0.01 & abs(logFC) > 0.5, 
-                                ifelse(logFC > 0, "Up", "Down"), "NS")), 
+  geom_point(aes(color = ifelse(adj.P.Val < 0.01 & abs(logFC) > 0.5,
+                                ifelse(logFC > 0, "Up", "Down"), "NS")),
              alpha = 0.7) +
   scale_color_manual(values = c(Up = "red", Down = "blue", NS = "grey")) +
   geom_hline(yintercept = -log10(0.01), linetype = "dashed") +
@@ -310,7 +310,7 @@ volcano_plot <- ggplot(diff_pathways,
   ggrepel::geom_text_repel(
     data = subset(diff_pathways, adj.P.Val < 0.01 & abs(logFC) > 0.5),
     aes(label = rownames(subset(diff_pathways, adj.P.Val < 0.01 & abs(logFC) > 0.5))),  # 关键修改
-    size = 3, 
+    size = 3,
     max.overlaps = 20) +
   labs(x = "Log2 Fold Change", y = "-Log10(Adj.Pvalue)")
 ggsave(file.path(output_dir,"GSVA_volcano.pdf"), plot = volcano_plot, width = 8, height = 6)
@@ -318,13 +318,13 @@ ggsave(file.path(output_dir,"GSVA_volcano.pdf"), plot = volcano_plot, width = 8,
 library(ggplot2)
 sig_pathways$Direction <- ifelse(sig_pathways$logFC > 0, "Up", "Down")
 top_pathways <- sig_pathways %>%
-  tibble::rownames_to_column("Pathway") %>%  
+  tibble::rownames_to_column("Pathway") %>%
   group_by(Direction) %>%
-  arrange(desc(abs(logFC)), .by_group = TRUE) %>%  
-  slice_head(n = 10) %>%  
-  tibble::column_to_rownames("Pathway")  
+  arrange(desc(abs(logFC)), .by_group = TRUE) %>%
+  slice_head(n = 10) %>%
+  tibble::column_to_rownames("Pathway")
 
-ggplot(top_pathways, aes(x = reorder(rownames(top_pathways), logFC), 
+ggplot(top_pathways, aes(x = reorder(rownames(top_pathways), logFC),
                          y = logFC, fill = Direction)) +
   geom_bar(stat = "identity") +
   scale_fill_manual(values = c("#B83D3D", "#1A5592")) +
@@ -349,7 +349,7 @@ count_filtered <- count_data[rowSums(diff_data > 1) >= 3, ]
 genelist <- diff_data$log2FoldChange
 names(genelist) <- rownames(diff_data)
 genelist <- na.omit(genelist)
-genelist <- sort(genelist, decreasing = TRUE) 
+genelist <- sort(genelist, decreasing = TRUE)
 
 #去除版本号
 names(genelist) <- sub("\\..*", "", names(genelist))
@@ -359,10 +359,10 @@ genelist_entrez <- mapIds(
   keys = names(genelist),
   column = "ENTREZID",
   keytype = "ENSEMBL",
-  multiVals = "first"  
+  multiVals = "first"
 )
 names(genelist) <- genelist_entrez
-genelist <- na.omit(genelist) 
+genelist <- na.omit(genelist)
 
 gsea_res <- GSEA(
   geneList = genelist,
@@ -372,7 +372,7 @@ gsea_res <- GSEA(
   eps = 0,
   seed = 123  # 保证可重复性
 )
-write.csv(as.data.frame(gsea_res), 
+write.csv(as.data.frame(gsea_res),
           file = file.path(output_dir, "gsea_results.csv"),
           row.names = FALSE)
 
@@ -387,10 +387,10 @@ common_pathways <- intersect(gsea_res1$Description, gsea_res2$Description)
 
 # 提取各文件的NES和p.adjust
 result <- bind_rows(
-  gsea_res1 %>% 
+  gsea_res1 %>%
     filter(Description %in% common_pathways) %>%
     select(Description, "NES_A3A_KO" = NES, "p.adjust_A3A_KO" = p.adjust),
-  gsea_res2 %>% 
+  gsea_res2 %>%
     filter(Description %in% common_pathways) %>%
     select(Description, "NES_General" = NES, "p.adjust_General" = p.adjust)
 ) %>%
@@ -415,21 +415,21 @@ result <- bind_rows(
 
 
 
-count_data <- read.table("/dsk2/data/C-to-U/APOBEC3A/00.mergeRawFq/count.txt", 
-                         header = TRUE, 
+count_data <- read.table("/dsk2/data/C-to-U/APOBEC3A/00.mergeRawFq/count.txt",
+                         header = TRUE,
                          row.names = 1)
 
 # 新建geneID列（值为当前行名）
-count_data$geneID <- rownames(count_data) 
+count_data$geneID <- rownames(count_data)
 
 # 对geneID列去版本号（保留点号前的部分）
-count_data$geneID <- sub("\\..*", "", count_data$geneID)  
+count_data$geneID <- sub("\\..*", "", count_data$geneID)
 count_data<- aggregate(. ~ geneID, data = count_data, FUN = mean)
 # 将处理后的geneID赋给行名
-rownames(count_data) <- count_data$geneID  
+rownames(count_data) <- count_data$geneID
 
 # 删除临时列geneID
-count_data$geneID <- NULL 
+count_data$geneID <- NULL
 
 ensembl_ids <- rownames(count_data)
 
@@ -454,10 +454,10 @@ count_data$ENTREZID <- NULL
 calculate_cpm <- function(count_matrix) {
   # 1. 计算每列（样本）的总reads数
   lib_sizes <- colSums(count_matrix)
-  
+
   # 2. 计算CPM = (count / lib_size) * 1e6
   cpm_matrix <- t(t(count_matrix) / lib_sizes) * 1e6
-  
+
   # 3. 对结果取log2(CPM + 1)（避免log(0)）
   log2_cpm <- log2(cpm_matrix + 1)
   return(log2_cpm)
@@ -467,10 +467,10 @@ calculate_cpm <- function(count_matrix) {
 count_data_normalized <- calculate_cpm(count_data)
 
 params <- gsvaParam(
-  exprData = as.matrix(count_data_normalized), 
+  exprData = as.matrix(count_data_normalized),
   geneSets = kegg_list,
-  kcdf = "Poisson", 
-  absRanking = FALSE) 
+  kcdf = "Poisson",
+  absRanking = FALSE)
 
 gsva_result <- gsva(params, verbose = TRUE)
 
@@ -506,10 +506,10 @@ colnames(gsva_res2)[1] <- "Pathway"
 
 # 提取各文件的logFC和p.adjust
 result <- bind_rows(
-  gsva_res1 %>% 
+  gsva_res1 %>%
     filter(.[[1]] %in% common_pathways) %>%
     select(1 , "logFC_A3A" = logFC, "p.adjust_A3A_KO" = adj.P.Val),
-  gsva_res2 %>% 
+  gsva_res2 %>%
     filter(.[[1]]  %in% common_pathways) %>%
     select(1 , "logFC_General" = logFC, "p.adjust_General" = adj.P.Val)
 ) %>%
@@ -524,8 +524,8 @@ result <- bind_rows(
 
 filtered_result <- result %>%
   filter(
-    abs(logFC_A3A) > 0.5 &         
-      abs(logFC_General) > 0.5 &        
+    abs(logFC_A3A) > 0.5 &
+      abs(logFC_General) > 0.5 &
       sign(logFC_A3A) != sign(logFC_General)  # 符号相反
   )
 
@@ -558,7 +558,7 @@ count_filtered <- count_data[rowSums(diff_data > 1) >= 3, ]
 genelist <- diff_data$log2FoldChange
 names(genelist) <- rownames(diff_data)
 genelist <- na.omit(genelist)
-genelist <- sort(genelist, decreasing = TRUE) 
+genelist <- sort(genelist, decreasing = TRUE)
 
 #去除版本号
 names(genelist) <- sub("\\..*", "", names(genelist))
@@ -568,10 +568,10 @@ genelist_entrez <- mapIds(
   keys = names(genelist),
   column = "ENTREZID",
   keytype = "ENSEMBL",
-  multiVals = "first"  
+  multiVals = "first"
 )
 names(genelist) <- genelist_entrez
-genelist <- na.omit(genelist) 
+genelist <- na.omit(genelist)
 
 gsea_res <- GSEA(
   geneList = genelist,
@@ -581,7 +581,7 @@ gsea_res <- GSEA(
   eps = 0,
   seed = 123  # 保证可重复性
 )
-write.csv(as.data.frame(gsea_res), 
+write.csv(as.data.frame(gsea_res),
           file = file.path(output_dir, "gsea_results.csv"),
           row.names = FALSE)
 
@@ -596,10 +596,10 @@ common_pathways <- intersect(gsea_res1$Description, gsea_res2$Description)
 
 # 提取各文件的NES和p.adjust
 result <- bind_rows(
-  gsea_res1 %>% 
+  gsea_res1 %>%
     filter(Description %in% common_pathways) %>%
     select(Description, "NES_A3A_KO" = NES, "p.adjust_A3A_KO" = p.adjust),
-  gsea_res2 %>% 
+  gsea_res2 %>%
     filter(Description %in% common_pathways) %>%
     select(Description, "NES_General" = NES, "p.adjust_General" = p.adjust)
 ) %>%
@@ -633,21 +633,21 @@ result <- bind_rows(
 
 
 
-count_data <- read.table("/dsk2/who/panxy/RNAediting/CAD/count.txt", 
-                         header = TRUE, 
+count_data <- read.table("/dsk2/who/panxy/RNAediting/CAD/count.txt",
+                         header = TRUE,
                          row.names = 1)
 
 # 新建geneID列（值为当前行名）
-count_data$geneID <- rownames(count_data) 
+count_data$geneID <- rownames(count_data)
 
 # 对geneID列去版本号（保留点号前的部分）
-count_data$geneID <- sub("\\..*", "", count_data$geneID)  
+count_data$geneID <- sub("\\..*", "", count_data$geneID)
 count_data<- aggregate(. ~ geneID, data = count_data, FUN = mean)
 # 将处理后的geneID赋给行名
-rownames(count_data) <- count_data$geneID  
+rownames(count_data) <- count_data$geneID
 
 # 删除临时列geneID
-count_data$geneID <- NULL 
+count_data$geneID <- NULL
 
 ensembl_ids <- rownames(count_data)
 
@@ -672,10 +672,10 @@ count_data$ENTREZID <- NULL
 calculate_cpm <- function(count_matrix) {
   # 1. 计算每列（样本）的总reads数
   lib_sizes <- colSums(count_matrix)
-  
+
   # 2. 计算CPM = (count / lib_size) * 1e6
   cpm_matrix <- t(t(count_matrix) / lib_sizes) * 1e6
-  
+
   # 3. 对结果取log2(CPM + 1)（避免log(0)）
   log2_cpm <- log2(cpm_matrix + 1)
   return(log2_cpm)
@@ -685,10 +685,10 @@ calculate_cpm <- function(count_matrix) {
 count_data_normalized <- calculate_cpm(count_data)
 
 params <- gsvaParam(
-  exprData = as.matrix(count_data_normalized), 
+  exprData = as.matrix(count_data_normalized),
   geneSets = kegg_list,
-  kcdf = "Poisson", 
-  absRanking = FALSE) 
+  kcdf = "Poisson",
+  absRanking = FALSE)
 
 gsva_result <- gsva(params, verbose = TRUE)
 
@@ -724,10 +724,10 @@ colnames(gsva_res2)[1] <- "Pathway"
 
 # 提取各文件的logFC和p.adjust
 result <- bind_rows(
-  gsva_res1 %>% 
+  gsva_res1 %>%
     filter(.[[1]] %in% common_pathways) %>%
     select(1 , "logFC_A3A" = logFC, "p.adjust_A3A_KO" = adj.P.Val),
-  gsva_res2 %>% 
+  gsva_res2 %>%
     filter(.[[1]]  %in% common_pathways) %>%
     select(1 , "logFC_General" = logFC, "p.adjust_General" = adj.P.Val)
 ) %>%
@@ -766,11 +766,11 @@ filtered_result <- result %>%
 
 
 #####APOBEC3A#####13+37
-count_data1 <- read.table("/dsk2/who/panxy/RNAediting/CAD/count.txt", 
-                         header = TRUE, 
+count_data1 <- read.table("/dsk2/who/panxy/RNAediting/CAD/count.txt",
+                         header = TRUE,
                          row.names = 1)
-count_data2 <- read.table("/dsk2/data/C-to-U/APOBEC3A/00.mergeRawFq/count.txt", 
-                         header = TRUE, 
+count_data2 <- read.table("/dsk2/data/C-to-U/APOBEC3A/00.mergeRawFq/count.txt",
+                         header = TRUE,
                          row.names = 1)
 
 
@@ -782,16 +782,16 @@ all(rownames(count_data1) == rownames(count_data2))  # 应该返回 TRUE
 count_data <- cbind(count_data1, count_data2)
 
 # 新建geneID列（值为当前行名）
-count_data$geneID <- rownames(count_data) 
+count_data$geneID <- rownames(count_data)
 
 # 对geneID列去版本号（保留点号前的部分）
-count_data$geneID <- sub("\\..*", "", count_data$geneID)  
+count_data$geneID <- sub("\\..*", "", count_data$geneID)
 count_data<- aggregate(. ~ geneID, data = count_data, FUN = mean)
 # 将处理后的geneID赋给行名
-rownames(count_data) <- count_data$geneID  
+rownames(count_data) <- count_data$geneID
 
 # 删除临时列geneID
-count_data$geneID <- NULL 
+count_data$geneID <- NULL
 
 ensembl_ids <- rownames(count_data)
 
@@ -816,10 +816,10 @@ count_data$ENTREZID <- NULL
 calculate_cpm <- function(count_matrix) {
   # 1. 计算每列（样本）的总reads数
   lib_sizes <- colSums(count_matrix)
-  
+
   # 2. 计算CPM = (count / lib_size) * 1e6
   cpm_matrix <- t(t(count_matrix) / lib_sizes) * 1e6
-  
+
   # 3. 对结果取log2(CPM + 1)（避免log(0)）
   log2_cpm <- log2(cpm_matrix + 1)
   return(log2_cpm)
@@ -829,10 +829,10 @@ calculate_cpm <- function(count_matrix) {
 count_data_normalized <- calculate_cpm(count_data)
 
 params <- gsvaParam(
-  exprData = as.matrix(count_data_normalized), 
+  exprData = as.matrix(count_data_normalized),
   geneSets = kegg_list,
-  kcdf = "Poisson", 
-  absRanking = FALSE) 
+  kcdf = "Poisson",
+  absRanking = FALSE)
 
 gsva_result <- gsva(params, verbose = TRUE)
 
@@ -868,10 +868,10 @@ colnames(gsva_res2)[1] <- "Pathway"
 
 # 提取各文件的logFC和p.adjust
 result <- bind_rows(
-  gsva_res1 %>% 
+  gsva_res1 %>%
     filter(.[[1]] %in% common_pathways) %>%
     select(1 , "logFC_A3A" = logFC, "p.adjust_A3A_KO" = adj.P.Val),
-  gsva_res2 %>% 
+  gsva_res2 %>%
     filter(.[[1]]  %in% common_pathways) %>%
     select(1 , "logFC_General" = logFC, "p.adjust_General" = adj.P.Val)
 ) %>%
@@ -886,8 +886,8 @@ result <- bind_rows(
 
 filtered_result <- result %>%
   filter(
-    abs(logFC_A3A) > 0.5 &         
-      abs(logFC_General) > 0.5 &        
+    abs(logFC_A3A) > 0.5 &
+      abs(logFC_General) > 0.5 &
       sign(logFC_A3A) != sign(logFC_General)  # 符号相反
   )
 #Biocarta嗜酸性粒细胞通路
@@ -904,16 +904,16 @@ filtered_result <- result %>%
 diff_data <- read.csv(
   "/public3/DSC/single_cell/GSE159677/GSVA/Differential_Expression_Results_13+37_vs_WT.csv",
   header = TRUE,
-  row.names = 1 
+  row.names = 1
 )
 rownames(diff_data) <- diff_data$symbol
 genelist <- diff_data$log2FoldChange
 names(genelist) <- rownames(diff_data)
 genelist <- na.omit(genelist)
-genelist <- sort(genelist, decreasing = TRUE) 
-genelist_entrez <- bitr(names(genelist), 
-                        fromType = "SYMBOL", 
-                        toType = "ENTREZID", 
+genelist <- sort(genelist, decreasing = TRUE)
+genelist_entrez <- bitr(names(genelist),
+                        fromType = "SYMBOL",
+                        toType = "ENTREZID",
                         OrgDb = org.Hs.eg.db)
 
 # 更新 genelist 的命名
@@ -927,7 +927,7 @@ gsea_res <- GSEA(
   eps = 0,
   seed = 123  # 保证可重复性
 )
-write.csv(as.data.frame(gsea_res), 
+write.csv(as.data.frame(gsea_res),
           file = file.path(output_dir, "13+37_gsea_results.csv"),
           row.names = FALSE)
 file1 <- "/public3/DSC/single_cell/GSE159677/GSEA/13+37_gsea_results.csv"
@@ -940,14 +940,14 @@ common_pathways <- intersect(gsea_res1$Description, gsea_res2$Description)
 
 # 提取各文件的NES和p.adjust
 result <- full_join(
-  gsea_res1 %>% 
+  gsea_res1 %>%
     filter(Description %in% common_pathways) %>%
     select(Description, "NES_A3A_KO" = NES, "p.adjust_A3A_KO" = p.adjust),
-  gsea_res2 %>% 
+  gsea_res2 %>%
     filter(Description %in% common_pathways) %>%
     select(Description, "NES_General" = NES, "p.adjust_General" = p.adjust)
 ) %>%
-  group_by(Description) 
+  group_by(Description)
 #	GHANDHI_旁观者辐射激活通路
 #ONDER_CDH1靶标下调2
 #HINATA_NFKB靶标（成纤维细胞激活）
@@ -991,16 +991,16 @@ diff_data <- diff_data[, c(ncol(diff_data), 1:(ncol(diff_data)-1))]
 
 #火山图
 library(ggplot2)
-library(ggrepel) 
+library(ggrepel)
 
 # 计算-log10(padj)
 diff_data$log10_padj <- -log10(diff_data$padj)
 diff_data <- subset(diff_data, !is.na(sig) & sig != "NA")
 
 highlight_genes <- c(
-  "CYP27A1", "FGL2", "ID3", "TNFAIP8L2", "PTAFR", "FZD1", 
-  "SLC11A1", "MMP19", "MMP9", "CCRL2", "CD82", "IL4I1", 
-  "CCL20", "CXCL8", "IL1R1", "IL1R2", "MGLL", "CEBPB", 
+  "CYP27A1", "FGL2", "ID3", "TNFAIP8L2", "PTAFR", "FZD1",
+  "SLC11A1", "MMP19", "MMP9", "CCRL2", "CD82", "IL4I1",
+  "CCL20", "CXCL8", "IL1R1", "IL1R2", "MGLL", "CEBPB",
   "NLRP1", "WIPI1", "CXCL3"
 )
 # 在数据框中添加一个标记列
@@ -1021,35 +1021,35 @@ p <- ggplot(diff_data, aes(x = log2FoldChange, y = log10_padj)) +
   geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "grey40") +
   labs(x = "log2(Fold Change)", y = "-log10(Adjusted p-value)") +
   theme_bw() +
-  geom_text_repel(  
+  geom_text_repel(
     data = subset(diff_data, highlight == "Target"),
     aes(label = symbol),
     size = 4,
     color = "black",
-    nudge_x = 0.5,  
-    direction = "y",  
-    segment.size = 0,  
-    max.overlaps = Inf,  
-    box.padding = 0.8,  
-    seed = 123  
+    nudge_x = 0.5,
+    direction = "y",
+    segment.size = 0,
+    max.overlaps = Inf,
+    box.padding = 0.8,
+    seed = 123
   )+
   theme(legend.position = "right")+
 theme(
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     legend.position = "right",
-    axis.title.x = element_text(size = 14, face = "bold"),  
-    axis.title.y = element_text(size = 14, face = "bold"), 
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
     legend.title = element_text(size = 12, face = "bold"),
-    axis.text = element_text(size = 10), 
+    axis.text = element_text(size = 10),
     legend.text = element_text(size = 11)
   )
 print(p)
 # 设置PDF输出参数
 pdf(
-  file = "/public3/DSC/single_cell/GSE159677/GSVA/matched_markers_clone13.pdf", 
-  width = 8,   
-  height = 6,   
+  file = "/public3/DSC/single_cell/GSE159677/GSVA/matched_markers_clone13.pdf",
+  width = 8,
+  height = 6,
   pointsize = 12  #
 )
 
@@ -1064,21 +1064,21 @@ diff_data <- diff_data[diff_data$sig != "none", ]
 
 matched_markers <- markers[rownames(markers) %in% diff_data$symbol, ]
 matched_markers$gene <- rownames(matched_markers)
-diff_data$gene <- diff_data$symbol    
+diff_data$gene <- diff_data$symbol
 de_cols <- c("gene", "log2FoldChange", "lfcSE", "stat", "pvalue", "padj", "sig")
 
-matched_markers <- merge(matched_markers, 
+matched_markers <- merge(matched_markers,
                      diff_data[, de_cols],
                      by = "gene",
                      all.x = TRUE)
 
 # 恢复行名
 #rownames(matched_markers) <- matched_markers$gene
-#matched_markers$gene <- NULL 
+#matched_markers$gene <- NULL
 matched_markers$sign_mismatch <- sign(matched_markers$avg_log2FC) != sign(matched_markers$log2FoldChange)
 
 matched_markers <- matched_markers[matched_markers$sign_mismatch, ]
-matched_markers$sign_mismatch <- NULL 
+matched_markers$sign_mismatch <- NULL
 matched_markers <- matched_markers[order(matched_markers$padj), ]
 rownames(head(matched_markers, 200))
 write.csv(matched_markers,"/public3/DSC/single_cell/GSE159677/GSVA/matched_markers_clone13.csv")
@@ -1126,43 +1126,43 @@ diff_data <- diff_data[diff_data$sig != "none", ]
 
 matched_markers <- markers[rownames(markers) %in% diff_data$symbol, ]
 matched_markers$gene <- rownames(matched_markers)
-diff_data$gene <- diff_data$symbol    
+diff_data$gene <- diff_data$symbol
 de_cols <- c("gene", "log2FoldChange", "lfcSE", "stat", "pvalue", "padj", "sig")
 
-matched_markers <- merge(matched_markers, 
+matched_markers <- merge(matched_markers,
                          diff_data[, de_cols],
                          by = "gene",
                          all.x = TRUE)
 
 # 恢复行名
 #rownames(matched_markers) <- matched_markers$gene
-#matched_markers$gene <- NULL 
+#matched_markers$gene <- NULL
 matched_markers$sign_mismatch <- sign(matched_markers$avg_log2FC) != sign(matched_markers$log2FoldChange)
 matched_markers <- matched_markers[matched_markers$sign_mismatch, ]
-matched_markers$sign_mismatch <- NULL 
+matched_markers$sign_mismatch <- NULL
 matched_markers1 <- matched_markers[order(matched_markers$padj), ]
 head(matched_markers1$gene, 200)
 write.csv(matched_markers1,"/public3/DSC/single_cell/GSE159677/GSVA/matched_markers_clone37.csv")
-#敲除后下降：CCL20、CXCL8、IL1R1、IL1RN、NFKBIA、MGLL、CEBPB、SLC11A1、THBS1、MMP9、MMP19、	
+#敲除后下降：CCL20、CXCL8、IL1R1、IL1RN、NFKBIA、MGLL、CEBPB、SLC11A1、THBS1、MMP9、MMP19、
 #FN1、IL6R、LCP1
 #敲除后上升：KLF4、UCP2、PDK4：促炎
 
 common_genes <- intersect(matched_markers1$gene, matched_markers$gene)
 print(common_genes)
-# "CCL20"       "CXCL8"       "EREG"        "FCAR"        "IL1R1"       "MGLL"        "MMP19"      
-# "MMP9"        "PLK2"        "C5AR1"       "IGSF6"       "SPATA13"     "GPR35"       "SLC6A6"     
-# "CD82"        "KLF4"        "CXCL3"       "TUBA1A"      "LUCAT1"      "MRAS"        "RHOB"       
-# "NRIP3"       "C3AR1"       "UPP1"        "ITGB8"       "G0S2"        "TFPI"        "CEMIP2"     
-# "THBS1"       "SERPINA1"    "CEBPB"       "ANPEP"       "PRKACB"      "SASH1"       "CYSLTR1"    
-#"IL4I1"       "CHST15"      "PLA2G7"      "QPCT"        "FZD1"        "BCL2A1"      "ID3"        
-# "SLC11A1"     "MIR4435-2HG" "GCH1"        "TMCO3"       "EMB"         "RNF125"      "ATF5"       
-# "CTSL"        "CCL2"        "ADRB2"       "PTGER2"      "CYP27A1"     "RGCC"        "SESN3"      
-#"TSC22D3"     "RPS6KA4"     "PTAFR"       "MS4A4A"      "AQP9"        "CCRL2"       "FGL2"       
-# "PLD4"        "EGLN3"       "IL1R2"       "FN1"         "CLMN"        "ZFP36L2"     "WIPI1"      
-# "CD69"        "OTULINL"     "MT2A"        "TGFBR1"      "KIF13A"      "CLEC4E"      "CST3"       
-#"FGR"         "KLF2"        "TEX30"       "CCNG2"       "NLRP1"       "OTOA"        "GFRA2"      
-#"PCOLCE2"     "CPED1"       "FOLR2"       "CALHM6"      "RELL1"       "ZNF33A"      "ZNF124"     
-# "FILIP1L"     "TNFAIP8L2"   "MS4A6A"      "S1PR4"       "TMEM205"     "FAM13B"      "CD302"  
+# "CCL20"       "CXCL8"       "EREG"        "FCAR"        "IL1R1"       "MGLL"        "MMP19"
+# "MMP9"        "PLK2"        "C5AR1"       "IGSF6"       "SPATA13"     "GPR35"       "SLC6A6"
+# "CD82"        "KLF4"        "CXCL3"       "TUBA1A"      "LUCAT1"      "MRAS"        "RHOB"
+# "NRIP3"       "C3AR1"       "UPP1"        "ITGB8"       "G0S2"        "TFPI"        "CEMIP2"
+# "THBS1"       "SERPINA1"    "CEBPB"       "ANPEP"       "PRKACB"      "SASH1"       "CYSLTR1"
+#"IL4I1"       "CHST15"      "PLA2G7"      "QPCT"        "FZD1"        "BCL2A1"      "ID3"
+# "SLC11A1"     "MIR4435-2HG" "GCH1"        "TMCO3"       "EMB"         "RNF125"      "ATF5"
+# "CTSL"        "CCL2"        "ADRB2"       "PTGER2"      "CYP27A1"     "RGCC"        "SESN3"
+#"TSC22D3"     "RPS6KA4"     "PTAFR"       "MS4A4A"      "AQP9"        "CCRL2"       "FGL2"
+# "PLD4"        "EGLN3"       "IL1R2"       "FN1"         "CLMN"        "ZFP36L2"     "WIPI1"
+# "CD69"        "OTULINL"     "MT2A"        "TGFBR1"      "KIF13A"      "CLEC4E"      "CST3"
+#"FGR"         "KLF2"        "TEX30"       "CCNG2"       "NLRP1"       "OTOA"        "GFRA2"
+#"PCOLCE2"     "CPED1"       "FOLR2"       "CALHM6"      "RELL1"       "ZNF33A"      "ZNF124"
+# "FILIP1L"     "TNFAIP8L2"   "MS4A6A"      "S1PR4"       "TMEM205"     "FAM13B"      "CD302"
 #CYP27A1:胆固醇代谢
 #FGL2: M1极化
 #ID3：上调，M2极化

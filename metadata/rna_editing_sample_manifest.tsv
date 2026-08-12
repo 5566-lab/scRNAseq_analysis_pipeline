@@ -1,0 +1,13 @@
+JACUSA_Condition	JACUSA_Replicate	Condition	Sample_Name	Batch	BAM	Order_In_JACUSA_Command
+cond1	rep1	WT	M0-WT-01	clone13	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/M0-WT-01/M0-WT-01.sorted.bam	1
+cond1	rep2	WT	M0-WT-02	clone13	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/M0-WT-02/M0-WT-02.sorted.bam	2
+cond1	rep3	WT	M0-WT-03	clone13	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/M0-WT-03/M0-WT-03.sorted.bam	3
+cond1	rep4	WT	WT.1	clone37	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/WT.1/WT.1.sorted.bam	4
+cond1	rep5	WT	WT.2	clone37	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/WT.2/WT.2.sorted.bam	5
+cond1	rep6	WT	WT.3	clone37	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/WT.3/WT.3.sorted.bam	6
+cond2	rep1	KO	KO.1	clone37	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/KO.1/KO.1.sorted.bam	1
+cond2	rep2	KO	KO.2	clone37	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/KO.2/KO.2.sorted.bam	2
+cond2	rep3	KO	KO.3	clone37	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/KO.3/KO.3.sorted.bam	3
+cond2	rep4	KO	M0-13-01	clone13	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/M0-13-01/M0-13-01.sorted.bam	4
+cond2	rep5	KO	M0-13-02	clone13	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/M0-13-02/M0-13-02.sorted.bam	5
+cond2	rep6	KO	M0-13-03	clone13	/public7/DSC_Public7/DSC/DSC/20251004_NGS/Aligned/M0-13-03/M0-13-03.sorted.bam	6

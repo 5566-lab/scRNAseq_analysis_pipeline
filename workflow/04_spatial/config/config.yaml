@@ -1,0 +1,19 @@
+project:
+  name: atherosclerosis_spatial_publication
+
+inputs:
+  spatial_root: /public3/DSC/single_cell/spatial
+  single_cell_root: /public3/DSC/single_cell
+  xenium_rds: /public3/DSC/single_cell/spatial/GSE315246_xenium.obj.integrated.rds
+  visium_rds: /public3/DSC/single_cell/spatial/GSE314851_Visium_FFPE_integrated.rds
+  single_cell_moma_reference_rds: /public3/DSC/single_cell/Result/sub_integrated_data_Final.rds
+
+outputs:
+  figures: results/spatial/figures
+  tables: results/spatial/tables
+  logs: results/spatial/logs
+
+severity_levels:
+  - Mild
+  - Moderate
+  - Severe
